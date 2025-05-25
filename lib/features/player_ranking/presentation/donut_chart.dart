@@ -1,40 +1,63 @@
 import 'dart:math';
+import 'dart:ui' as ui;
+
 import 'package:flutter/material.dart';
 
-/// 🎯 Donut Chart com imagem nas fatias
-class PlayersDonutChart extends StatelessWidget {
+class PlayersDonutChart extends StatefulWidget {
   final List<List<String>> values;
 
   const PlayersDonutChart({super.key, required this.values});
 
   @override
+  State<PlayersDonutChart> createState() => _PlayersDonutChartState();
+}
+
+class _PlayersDonutChartState extends State<PlayersDonutChart> {
+  ui.Image? image;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadImage('lib/assets/florian.png');
+  }
+
+  Future<void> _loadImage(String assetPath) async {
+    final data = await DefaultAssetBundle.of(context).load(assetPath);
+    final codec = await ui.instantiateImageCodec(data.buffer.asUint8List());
+    final frame = await codec.getNextFrame();
+    setState(() {
+      image = frame.image;
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final data = values
+    final data = widget.values
         .map((row) => {
-      'name': row.isNotEmpty ? row[0] : 'Unknown',
-      'wins': row.length > 1 ? int.tryParse(row[1]) ?? 0 : 0,
-    })
+              'name': row.isNotEmpty ? row[0] : 'Unknown',
+              'wins': row.length > 1 ? int.tryParse(row[1]) ?? 0 : 0,
+            })
         .toList();
 
     final totalWins = data.fold<int>(
         0, (previous, element) => previous + (element['wins'] as int));
 
+    if (image == null) {
+      return const Center(child: CircularProgressIndicator());
+    }
+
     return AspectRatio(
       aspectRatio: 1,
       child: Stack(
         children: [
-          // 🧩 Desenha cada fatia
-          for (int i = 0; i < data.length; i++) ...[
-            _buildSlice(
-              startAngle: data.sublist(0, i).fold<double>(
-                  0,
-                      (sum, item) =>
-                  sum + ((item['wins'] as int) / totalWins) * 360),
-              sweepAngle: ((data[i]['wins'] as int) / totalWins) * 360,
-              image: const AssetImage('lib/assets/florian.png'),
+          CustomPaint(
+            size: Size.infinite,
+            painter: DonutChartPainter(
+              data: data,
+              totalWins: totalWins,
+              image: image!,
             ),
-          ],
-          // 🕳️ Furo central para virar Donut
+          ),
           Center(
             child: Container(
               width: 120,
@@ -66,78 +89,90 @@ class PlayersDonutChart extends StatelessWidget {
       ),
     );
   }
-
-  Widget _buildSlice({
-    required double startAngle,
-    required double sweepAngle,
-    required ImageProvider image,
-  }) {
-    return Positioned.fill(
-      child: Transform.rotate(
-        angle: startAngle * pi / 180,
-        child: ClipPath(
-          clipper: PieSliceClipper(sweepAngle),
-          child: Image(
-            image: image,
-            fit: BoxFit.cover,
-          ),
-        ),
-      ),
-    );
-  }
 }
 
-/// 🔺 Clipper que desenha uma fatia
-class PieSliceClipper extends CustomClipper<Path> {
-  final double sweepAngle;
-  final double innerRadiusFactor;
+/// 🎨 Painter que desenha o Donut com imagens alinhadas corretamente
+class DonutChartPainter extends CustomPainter {
+  final List<Map<String, dynamic>> data;
+  final int totalWins;
+  final ui.Image image;
 
-  PieSliceClipper(
-      this.sweepAngle, {
-        this.innerRadiusFactor = 0.6, // 🕳️ Define o tamanho do furo
-      });
+  DonutChartPainter({
+    required this.data,
+    required this.totalWins,
+    required this.image,
+  });
 
   @override
-  Path getClip(Size size) {
+  void paint(Canvas canvas, Size size) {
+    final center = Offset(size.width / 2, size.height / 2);
     final outerRadius = size.width / 2;
-    final innerRadius = outerRadius * innerRadiusFactor;
-    final center = Offset(outerRadius, outerRadius);
+    final innerRadius = outerRadius * 0.6;
+    double startAngle = -pi / 2;
 
-    final path = Path();
+    for (var item in data) {
+      final wins = item['wins'] as int;
+      final sweepAngle = (wins / totalWins) * 2 * pi;
 
-    // Começa no arco externo
-    path.moveTo(center.dx, center.dy - outerRadius);
-    path.arcTo(
-      Rect.fromCircle(center: center, radius: outerRadius),
-      -pi / 2,
-      sweepAngle * pi / 180,
-      false,
-    );
-    path.lineTo(
-      center.dx +
-          innerRadius *
-              cos((sweepAngle - 90) *
-                  pi /
-                  180), // Move para o ponto do arco interno
-      center.dy +
-          innerRadius *
-              sin((sweepAngle - 90) *
-                  pi /
-                  180), // Move para o ponto do arco interno
-    );
-    path.arcTo(
-      Rect.fromCircle(center: center, radius: innerRadius),
-      (sweepAngle - 90) * pi / 180,
-      -sweepAngle * pi / 180,
-      false,
-    );
-    path.close();
+      // Desenha a fatia do donut
+      final path = Path()
+        ..moveTo(
+          center.dx + outerRadius * cos(startAngle),
+          center.dy + outerRadius * sin(startAngle),
+        )
+        ..arcTo(
+          Rect.fromCircle(center: center, radius: outerRadius),
+          startAngle,
+          sweepAngle,
+          false,
+        )
+        ..lineTo(
+          center.dx + innerRadius * cos(startAngle + sweepAngle),
+          center.dy + innerRadius * sin(startAngle + sweepAngle),
+        )
+        ..arcTo(
+          Rect.fromCircle(center: center, radius: innerRadius),
+          startAngle + sweepAngle,
+          -sweepAngle,
+          false,
+        )
+        ..close();
 
-    return path;
+      canvas.save();
+      canvas.clipPath(path);
+
+      // 🔥 Posiciona a imagem centralizada no meio da fatia, reta (não gira)
+      final middleAngle = startAngle + sweepAngle / 2;
+      final radius = (outerRadius + innerRadius) / 2;
+      final imageCenter = Offset(
+        center.dx + radius * cos(middleAngle),
+        center.dy + radius * sin(middleAngle),
+      );
+
+      final imageSize = Size(
+        (outerRadius - innerRadius) * 1.5,
+        (outerRadius - innerRadius) * 1.5,
+      );
+
+      final imageRect = Rect.fromCenter(
+        center: imageCenter,
+        width: imageSize.width,
+        height: imageSize.height,
+      );
+
+      paintImage(
+        canvas: canvas,
+        rect: imageRect,
+        image: image,
+        fit: BoxFit.cover,
+      );
+
+      canvas.restore();
+
+      startAngle += sweepAngle;
+    }
   }
 
   @override
-  bool shouldReclip(PieSliceClipper oldClipper) =>
-      oldClipper.sweepAngle != sweepAngle ||
-          oldClipper.innerRadiusFactor != innerRadiusFactor;
+  bool shouldRepaint(DonutChartPainter oldDelegate) => true;
 }
