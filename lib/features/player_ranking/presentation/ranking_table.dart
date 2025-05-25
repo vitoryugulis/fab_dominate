@@ -13,7 +13,7 @@ class PlayersRankingWithChart extends StatelessWidget {
     if (values.isEmpty) {
       return const Center(
         child: CircularProgressIndicator(
-          color: Color(0xFFDFD0B8),
+          color: AppColors.primaryLight,
         ),
       );
     }
@@ -24,11 +24,12 @@ class PlayersRankingWithChart extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Expanded(
-            flex: 2,
+            flex: 55,
             child: PlayersRankingTable(values: values),
           ),
+          SizedBox(width: 36),
           Expanded(
-            flex: 1,
+            flex: 45,
             child: PlayersDonutChart(values: values),
           ),
         ],
@@ -66,7 +67,6 @@ class PlayersRankingTable extends StatelessWidget {
                 fontSize: 18,
               ),
               columns: const [
-                DataColumn(label: Text('Rank')),
                 DataColumn(label: Text('Player')),
                 DataColumn(label: Text('Wins')),
                 DataColumn(label: Text('Events')),
@@ -90,7 +90,6 @@ class PlayersRankingTable extends StatelessWidget {
                   return DataRow(
                     color: WidgetStateColor.resolveWith((_) => rowColor),
                     cells: [
-                      DataCell(Text('${index + 1}')),
                       DataCell(Text(name)),
                       DataCell(Text(wins)),
                       DataCell(Text(events)),
