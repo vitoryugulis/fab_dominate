@@ -24,7 +24,7 @@ class _ReportSelectorMenuState extends State<ReportSelectorMenu> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: AppColors.black,
+      color: AppColors.beigeLight,
       child: Column(
         children: [
           Padding(
@@ -48,10 +48,10 @@ class _ReportSelectorMenuState extends State<ReportSelectorMenu> {
               },
               borderRadius: BorderRadius.circular(12),
               selectedColor: AppColors.beigeLight,
-              fillColor: AppColors.blueAccent,
-              color: AppColors.beigeDark,
+              fillColor: AppColors.primaryLight,
+              color: AppColors.primary,
               borderColor: AppColors.beigeDark,
-              selectedBorderColor: AppColors.blueAccent,
+              selectedBorderColor: AppColors.beigeDark,
               children: const [
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 16),

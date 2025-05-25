@@ -16,7 +16,7 @@ class SheetSelectorMenu extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: AppColors.black,
+      color: AppColors.beigeLight,
       child: SingleChildScrollView(
         scrollDirection: Axis.horizontal,
         padding: const EdgeInsets.all(8),
@@ -29,13 +29,13 @@ class SheetSelectorMenu extends StatelessWidget {
                 label: Text(
                   sheet,
                   style: TextStyle(
-                    color: isSelected ? AppColors.black : AppColors.beigeDark,
+                    color: isSelected ? AppColors.beigeLight : AppColors.beigeDark,
                   ),
                 ),
                 selected: isSelected,
                 onSelected: (_) => onSheetSelected(sheet),
-                selectedColor: AppColors.blueAccent,
-                backgroundColor: AppColors.darkGrey,
+                selectedColor: AppColors.primary,
+                backgroundColor: AppColors.primaryLight,
                 labelPadding: const EdgeInsets.symmetric(horizontal: 12),
               ),
             );

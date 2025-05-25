@@ -22,7 +22,7 @@ class WinsBarChart extends StatelessWidget {
             barRods: [
               BarChartRodData(
                 toY: wins,
-                color: AppColors.chartBlue,
+                color: AppColors.beigeDark,
                 borderRadius: BorderRadius.circular(4),
                 width: 18,
               ),
@@ -51,7 +51,7 @@ class WinsBarChart extends StatelessWidget {
                     getTitlesWidget: (value, meta) {
                       return Text(
                         value.toInt().toString(),
-                        style: TextStyle(fontSize: 10, color: AppColors.beigeDark),
+                        style: TextStyle(fontSize: 10, color: AppColors.primaryLight),
                       );
                     },
                   ),
@@ -68,7 +68,7 @@ class WinsBarChart extends StatelessWidget {
                         angle: -0.5,
                         child: Text(
                           values[value.toInt()][0],
-                          style: TextStyle(fontSize: 10, color: AppColors.beigeDark),
+                          style: TextStyle(fontSize: 10, color: AppColors.primary),
                           overflow: TextOverflow.ellipsis,
                         ),
                       );
@@ -84,13 +84,13 @@ class WinsBarChart extends StatelessWidget {
                 show: true,
                 drawVerticalLine: false,
                 getDrawingHorizontalLine: (value) => FlLine(
-                  color: AppColors.darkGrey.withOpacity(0.5),
+                  color: AppColors.primary.withValues(alpha: 0.5),
                   strokeWidth: 1,
                 ),
               ),
               borderData: FlBorderData(show: false),
               barGroups: barGroups,
-              backgroundColor: AppColors.black,
+              backgroundColor: AppColors.primaryLight,
             ),
           ),
         ),

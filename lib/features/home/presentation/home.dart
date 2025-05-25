@@ -15,6 +15,7 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   late final PlayerHeroDataSource playerHeroDataSource;
+  bool hasError = false;
 
   String selectedSheet = 'Player Report - Março';
   final List<String> availableSheets = [
@@ -37,6 +38,7 @@ class _HomeState extends State<Home> {
   }
 
   Future<void> loadData() async {
+    hasError = false;
     setState(() {
       values = [];
     });
@@ -51,7 +53,8 @@ class _HomeState extends State<Home> {
         winsData = _generateWinsData(fetchedValues);
       });
     } catch (e) {
-      print('Erro ao carregar dados: $e');
+      hasError = true;
+      debugPrint('Erro ao carregar dados: $e');
     }
   }
 
@@ -70,7 +73,7 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.black,
+      backgroundColor: AppColors.beigeLight,
       appBar: AppBar(
         backgroundColor: const Color(0xFF393E46),
         title: Text(
@@ -78,34 +81,41 @@ class _HomeState extends State<Home> {
           style: const TextStyle(color: AppColors.beigeLight),
         ),
       ),
-      body: Column(
-        children: [
-          // 👉 Menu de seleção da planilha
-          SheetSelectorMenu(
-            sheets: availableSheets,
-            selectedSheet: selectedSheet,
-            onSheetSelected: (sheet) {
-              setState(() {
-                selectedSheet = sheet;
-              });
-              loadData();
-            },
-          ),
-          // 👉 Conteúdo da planilha
-          Expanded(
-            child: values.isEmpty
-                ? const Center(
-                    child: CircularProgressIndicator(
-                      color: AppColors.beigeLight,
-                    ),
-                  )
-                : ReportSelectorMenu(
-                    values: values,
-                    winsData: winsData,
-                  ),
-          ),
-        ],
-      ),
+      body: !hasError
+          ? Column(
+              children: [
+                // 👉 Menu de seleção da planilha
+                SheetSelectorMenu(
+                  sheets: availableSheets,
+                  selectedSheet: selectedSheet,
+                  onSheetSelected: (sheet) {
+                    setState(() {
+                      selectedSheet = sheet;
+                    });
+                    loadData();
+                  },
+                ),
+                // 👉 Conteúdo da planilha
+                Expanded(
+                  child: values.isEmpty
+                      ? const Center(
+                          child: CircularProgressIndicator(
+                            color: AppColors.beigeLight,
+                          ),
+                        )
+                      : ReportSelectorMenu(
+                          values: values,
+                          winsData: winsData,
+                        ),
+                ),
+              ],
+            )
+          : const Center(
+              child: Text(
+                'Erro ao carregar dados',
+                style: TextStyle(color: AppColors.beigeLight),
+              ),
+            ),
     );
   }
 }

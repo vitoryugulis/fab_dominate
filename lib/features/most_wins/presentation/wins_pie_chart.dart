@@ -84,8 +84,8 @@ class _WinsPieChartState extends State<WinsPieChart> {
 
   Color _getColor(int index) {
     final colors = [
-      AppColors.black,
-      AppColors.darkGrey,
+      AppColors.primary,
+      AppColors.primaryLight,
       AppColors.beigeDark,
       AppColors.beigeLight,
       Colors.teal,

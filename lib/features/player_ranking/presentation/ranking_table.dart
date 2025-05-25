@@ -26,8 +26,8 @@ class PlayersRankingTable extends StatelessWidget {
             child: SingleChildScrollView(
               scrollDirection: Axis.horizontal,
               child: DataTable(
-                headingRowColor: MaterialStateColor.resolveWith(
-                  (_) => AppColors.darkGrey,
+                headingRowColor: WidgetStateColor.resolveWith(
+                  (_) => AppColors.primaryLight,
                 ),
                 headingTextStyle: TextStyle(
                   fontWeight: FontWeight.bold,
@@ -35,7 +35,7 @@ class PlayersRankingTable extends StatelessWidget {
                   fontSize: 20,
                 ),
                 dataTextStyle: TextStyle(
-                  color: AppColors.beigeLight,
+                  color: AppColors.primaryLight,
                   fontSize: 18,
                 ),
                 columns: const [
@@ -61,7 +61,7 @@ class PlayersRankingTable extends StatelessWidget {
                         : AppColors.darkRowColor;
 
                     return DataRow(
-                      color: MaterialStateColor.resolveWith((_) => rowColor),
+                      color: WidgetStateColor.resolveWith((_) => rowColor),
                       cells: [
                         DataCell(Text('${index + 1}')),
                         DataCell(Text(name)),
