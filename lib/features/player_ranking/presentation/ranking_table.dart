@@ -17,14 +17,13 @@ class PlayersRankingTable extends StatelessWidget {
     }
 
     return Center(
-      child: ConstrainedBox(
-        constraints: const BoxConstraints(maxWidth: 1200),
-        child: Padding(
-          padding: const EdgeInsets.all(24),
-          child: SingleChildScrollView(
-            scrollDirection: Axis.vertical,
-            child: SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
+      child: SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: SingleChildScrollView(
+          scrollDirection: Axis.vertical,
+          child: IntrinsicWidth(
+            child: Padding(
+              padding: const EdgeInsets.all(16),
               child: DataTable(
                 headingRowColor: WidgetStateColor.resolveWith(
                   (_) => AppColors.primaryLight,
@@ -41,10 +40,10 @@ class PlayersRankingTable extends StatelessWidget {
                 columns: const [
                   DataColumn(label: Text('Rank')),
                   DataColumn(label: Text('Player')),
-                  DataColumn(label: Text('Wins 🏆')),
-                  DataColumn(label: Text('Events 📅')),
-                  DataColumn(label: Text('Rounds 🎯')),
-                  DataColumn(label: Text('WinRate 🔥')),
+                  DataColumn(label: Text('Wins ')),
+                  DataColumn(label: Text('Events ')),
+                  DataColumn(label: Text('Rounds ')),
+                  DataColumn(label: Text('WinRate ')),
                 ],
                 rows: List<DataRow>.generate(
                   values.length,
