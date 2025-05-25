@@ -73,7 +73,8 @@ class _ReportSelectorMenuState extends State<ReportSelectorMenu> {
             child: () {
               switch (selectedReport) {
                 case 'Ranking':
-                  return PlayersRankingTable(values: widget.values);
+                  // return PlayersRankingTable(values: widget.values);
+                  return PlayersRankingWithChart(values: widget.values);
                 case 'Wins Bar Chart':
                   return WinsBarChart(values: widget.values);
                 case 'Wins Pie Chart':
@@ -103,3 +104,4 @@ class _ReportSelectorMenuState extends State<ReportSelectorMenu> {
     );
   }
 }
+
