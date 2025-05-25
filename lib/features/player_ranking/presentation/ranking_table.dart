@@ -37,6 +37,7 @@
       );
     }
   }
+
   class PlayersRankingTable extends StatelessWidget {
     final List<List<String>> values;
 
@@ -78,7 +79,7 @@
                     fontSize: 18,
                   ),
                   columns: const [
-                    DataColumn(label: Text('Player')),
+                    DataColumn(label: Text('Player/Hero')),
                     DataColumn(label: Text('Wins')),
                     DataColumn(label: Text('Events')),
                     DataColumn(label: Text('Rounds')),

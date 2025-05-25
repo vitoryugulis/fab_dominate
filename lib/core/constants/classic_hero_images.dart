@@ -1,4 +1,4 @@
-class HeroImages {
+class ClassicHeroImages {
   // High Seas
   static const String gravyBones = '';
   static const String puffin = '';
