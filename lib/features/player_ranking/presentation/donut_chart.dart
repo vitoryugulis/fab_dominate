@@ -93,7 +93,7 @@ class _PlayersDonutChartState extends State<PlayersDonutChart> {
   }
 }
 
-/// 🎨 Painter que desenha o Donut com imagens alinhadas corretamente
+/// 🎨 Painter que desenha o Donut com sombra nas bordas e imagens alinhadas
 class DonutChartPainter extends CustomPainter {
   final List<Map<String, dynamic>> data;
   final int totalWins;
@@ -112,6 +112,21 @@ class DonutChartPainter extends CustomPainter {
     final innerRadius = outerRadius * 0.6;
     double startAngle = -pi / 2;
 
+    // Sombra nas bordas do donut (blur suave)
+    final shadowPaint = Paint()
+      ..color = Colors.black.withOpacity(0.3)
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = outerRadius * 0.08
+      ..maskFilter = MaskFilter.blur(BlurStyle.normal, 10);
+
+    final shadowPath = Path()
+      ..addOval(Rect.fromCircle(center: center, radius: outerRadius))
+      ..addOval(Rect.fromCircle(center: center, radius: innerRadius))
+      ..fillType = PathFillType.evenOdd;
+
+    canvas.drawPath(shadowPath, shadowPaint);
+
+    // Desenha os segmentos do donut com imagens
     for (var item in data) {
       final wins = item['wins'] as int;
       final sweepAngle = (wins / totalWins) * 2 * pi;
