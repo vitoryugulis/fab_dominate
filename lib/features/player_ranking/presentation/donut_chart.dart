@@ -1,6 +1,5 @@
 import 'dart:math';
 import 'dart:ui' as ui;
-
 import 'package:flutter/material.dart';
 
 class PlayersDonutChart extends StatefulWidget {
@@ -14,20 +13,28 @@ class PlayersDonutChart extends StatefulWidget {
 
 class _PlayersDonutChartState extends State<PlayersDonutChart> {
   ui.Image? image;
+  ui.Image? centerImage;
 
   @override
   void initState() {
     super.initState();
-    _loadImage('lib/assets/florian.png');
+    _loadImages();
   }
 
-  Future<void> _loadImage(String assetPath) async {
+  Future<void> _loadImages() async {
+    final florian = await _loadImage('lib/assets/florian.png');
+    final fab = await _loadImage('lib/assets/fab.png');
+    setState(() {
+      image = florian;
+      centerImage = fab;
+    });
+  }
+
+  Future<ui.Image> _loadImage(String assetPath) async {
     final data = await DefaultAssetBundle.of(context).load(assetPath);
     final codec = await ui.instantiateImageCodec(data.buffer.asUint8List());
     final frame = await codec.getNextFrame();
-    setState(() {
-      image = frame.image;
-    });
+    return frame.image;
   }
 
   @override
@@ -42,7 +49,7 @@ class _PlayersDonutChartState extends State<PlayersDonutChart> {
     final totalWins = data.fold<int>(
         0, (previous, element) => previous + (element['wins'] as int));
 
-    if (image == null) {
+    if (image == null || centerImage == null) {
       return const Center(child: CircularProgressIndicator());
     }
 
@@ -58,13 +65,14 @@ class _PlayersDonutChartState extends State<PlayersDonutChart> {
               image: image!,
             ),
           ),
+          // 🔥 Imagem no centro, circular
           Center(
             child: Container(
-              width: 120,
-              height: 120,
+              width: 220, // 🔧 Ajuste o tamanho conforme desejar
+              height: 220,
               decoration: BoxDecoration(
-                color: Colors.black,
                 shape: BoxShape.circle,
+                color: Colors.black,
                 boxShadow: [
                   BoxShadow(
                     color: Colors.black.withOpacity(0.6),
@@ -72,15 +80,9 @@ class _PlayersDonutChartState extends State<PlayersDonutChart> {
                     spreadRadius: 1,
                   )
                 ],
-              ),
-              child: const Center(
-                child: Text(
-                  'Wins',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
+                image: DecorationImage(
+                  image: AssetImage('lib/assets/fab.png'),
+                  fit: BoxFit.cover,
                 ),
               ),
             ),
@@ -114,7 +116,6 @@ class DonutChartPainter extends CustomPainter {
       final wins = item['wins'] as int;
       final sweepAngle = (wins / totalWins) * 2 * pi;
 
-      // Desenha a fatia do donut
       final path = Path()
         ..moveTo(
           center.dx + outerRadius * cos(startAngle),
@@ -141,7 +142,6 @@ class DonutChartPainter extends CustomPainter {
       canvas.save();
       canvas.clipPath(path);
 
-      // 🔥 Posiciona a imagem centralizada no meio da fatia, reta (não gira)
       final middleAngle = startAngle + sweepAngle / 2;
       final radius = (outerRadius + innerRadius) / 2;
       final imageCenter = Offset(
