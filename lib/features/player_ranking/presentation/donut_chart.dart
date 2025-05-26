@@ -8,8 +8,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-final proxyUrl = 'https://cors-anywhere.herokuapp.com/';
-
 class PlayersDonutChart extends StatefulWidget {
   final List<List<String>> values;
 
