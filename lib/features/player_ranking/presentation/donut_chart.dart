@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:math';
-import 'dart:typed_data';
 import 'dart:ui' as ui;
 import 'package:dev/core/constants/classic_hero_images.dart';
 import 'package:dev/core/constants/hero_image_mapper.dart';
@@ -124,7 +123,7 @@ class _PlayersDonutChartState extends State<PlayersDonutChart> {
                 color: Colors.black,
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.6),
+                    color: Colors.black.withValues(alpha: 0.6),
                     blurRadius: 8,
                     spreadRadius: 1,
                   )
@@ -161,7 +160,7 @@ class DonutChartPainter extends CustomPainter {
     double startAngle = -pi / 2;
 
     final shadowPaint = Paint()
-      ..color = Colors.black.withOpacity(0.3)
+      ..color = Colors.black.withValues(alpha: 0.3)
       ..style = PaintingStyle.stroke
       ..strokeWidth = outerRadius * 0.08
       ..maskFilter = MaskFilter.blur(BlurStyle.normal, 10);
