@@ -1,14 +1,14 @@
 class ClassicHeroAssets {
   // High Seas
-  static const String cindra = 'lib/assets/heroes/cindra_cover.webp';
+  static const String cindra = 'lib/assets/heroes/cindra.png';
   static const String fang = 'lib/assets/heroes/fang_story.webp';
-  static const String arakni = 'lib/assets/heroes/chaos_story.webp';
-  static const String slippy = 'lib/assets/heroes/slippy_cover.webp';
+  static const String arakni = 'lib/assets/heroes/arakniMario.png';
+  static const String slippy = 'lib/assets/heroes/arakniSlippy.png';
   static const String other = 'lib/assets/heroes/sea_preview_cover.webp';
   static const String fab = 'lib/assets/fab.jpg';
 
   // 2024
-  static const String jarl = 'lib/assets/heroes/jarl_art.jpg';
+  static const String jarl = 'lib/assets/heroes/jarl.png';
   static const String aurora = 'lib/assets/heroes/aurora_cover.webp';
   static const String florian = 'lib/assets/heroes/florian_cover.webp';
   static const String oscilio = 'lib/assets/heroes/oscilio_cover.webp';
