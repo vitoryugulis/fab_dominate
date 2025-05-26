@@ -32,7 +32,7 @@ class _HomeState extends State<Home> {
     super.initState();
     playerHeroDataSource = PlayerHeroDataSource(
       dio: Dio(),
-      apiKey: apiKey,
+      apiKey: apiKey ?? '',
     );
     loadData();
   }

@@ -1,6 +1,8 @@
 import 'package:dev/features/home/presentation/home.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+void main() async {
 
-void main() {
+  await dotenv.load(fileName: ".env");
   runApp(const MaterialApp(home: Home()));
 }
