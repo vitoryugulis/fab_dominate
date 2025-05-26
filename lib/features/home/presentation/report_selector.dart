@@ -1,8 +1,9 @@
 import 'package:dev/core/constants/app_colors.dart';
-import 'package:dev/features/most_wins/presentation/wins_bar_chart.dart';
 import 'package:dev/features/most_wins/presentation/wins_donut_chart.dart';
 import 'package:dev/features/player_ranking/presentation/ranking_table.dart';
+import 'package:dev/features/player_ranking/presentation/ranking_table_mobile.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart'; // Para usar kIsWeb
 
 class ReportSelectorMenu extends StatefulWidget {
   final List<List<String>> values;
@@ -32,18 +33,13 @@ class _ReportSelectorMenuState extends State<ReportSelectorMenu> {
             child: ToggleButtons(
               isSelected: [
                 selectedReport == 'Ranking',
-                // selectedReport == 'Wins Bar Chart',
                 selectedReport == 'Wins Donut Chart',
               ],
               onPressed: (index) {
                 setState(() {
                   if (index == 0) {
                     selectedReport = 'Ranking';
-                  }
-                  // else if (index == 1) {
-                  //   selectedReport = 'Wins Bar Chart';
-                  // }
-                  else {
+                  } else {
                     selectedReport = 'Wins Donut Chart';
                   }
                 });
@@ -59,10 +55,6 @@ class _ReportSelectorMenuState extends State<ReportSelectorMenu> {
                   padding: EdgeInsets.symmetric(horizontal: 16),
                   child: Text('Ranking'),
                 ),
-                // Padding(
-                //   padding: EdgeInsets.symmetric(horizontal: 16),
-                //   child: Text('Wins Bar Chart'),
-                // ),
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 16),
                   child: Text('Wins Donut Chart'),
@@ -75,16 +67,14 @@ class _ReportSelectorMenuState extends State<ReportSelectorMenu> {
             child: () {
               switch (selectedReport) {
                 case 'Ranking':
-                  // return PlayersRankingTable(values: widget.values);
-                  return RankingTable(values: widget.values);
-                // case 'Wins Bar Chart':
-                //   return WinsBarChart(values: widget.values);
+                  return kIsWeb
+                      ? RankingTable(values: widget.values)
+                      : RankingTableMobile(values: widget.values);
                 case 'Wins Donut Chart':
                   return LayoutBuilder(
                     builder: (context, constraints) {
                       final height = constraints.maxHeight;
-                      final width =
-                          height; // tamanho quadrado para o círculo ficar redondo
+                      final width = height;
 
                       return Center(
                         child: SizedBox(

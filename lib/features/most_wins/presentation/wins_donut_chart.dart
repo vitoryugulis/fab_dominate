@@ -202,7 +202,7 @@ class DonutChartPainter extends CustomPainter {
 
       final middleAngle = startAngle + sweepAngle / 2;
       final radius = (outerRadius + innerRadius) / 2;
-      final offsetY = kIsWeb? 50.0 : 30;
+      final offsetY = kIsWeb ? 50.0 : 30;
 
       final imageCenter = Offset(
         center.dx + radius * cos(middleAngle),
