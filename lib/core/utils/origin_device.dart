@@ -1,11 +1,15 @@
+//import 'package:flutter/foundation.dart';
+
 import 'package:flutter/foundation.dart';
-import 'package:universal_io/io.dart' as io;
 
 class OriginDevice {
   static bool isMobileWeb() {
-    final userAgent = io.Platform.environment['HTTP_USER_AGENT'] ?? '';
-    return userAgent.contains('Android') ||
-        userAgent.contains('iPhone') ||
-        !kIsWeb;
+    try {
+      final userAgent =
+          (Uri.base.queryParameters['userAgent'] ?? '').toLowerCase();
+      return userAgent.contains('android') || userAgent.contains('iphone') || !kIsWeb;
+    } catch (e) {
+      return false;
+    }
   }
 }
