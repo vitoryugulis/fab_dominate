@@ -17,7 +17,12 @@ flutter run -d chrome --dart-define=FLAVOR=dev
 flutter run -d chrome --dart-define=FLAVOR=dev
 ```
 
+## Build Dev
+```bash
+flutter build web --release --base-href="/" --output=build/webdev --dart-define=FLAVOR=dev
+```
+
 ## Build Prod
 ```bash
-flutter build web --base-href="/liga_commoner_13dominate/" --release --dart-define=FLAVOR=dev
+flutter build web --base-href="/liga_commoner_13dominate/" --release --dart-define=FLAVOR=prod
 ```
