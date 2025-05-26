@@ -21,7 +21,7 @@ class ClassicHeroImages {
       'https://dhhim4ltzu1pj.cloudfront.net/media/images/ad-origins_jarl_art.original.jpg';
   static const String aurora =
       'https://dhhim4ltzu1pj.cloudfront.net/media/images/aurora_cover.width-10000.format-webp.webp';
-  static const String florian = '';
+  static const String florian = 'https://dhhim4ltzu1pj.cloudfront.net/media/images/florian_cover.width-10000.format-webp.webp';
   static const String oscilio =
       'https://dhhim4ltzu1pj.cloudfront.net/media/images/oscilio_cover.width-10000.format-webp.webp';
   static const String verdance =
@@ -38,14 +38,14 @@ class ClassicHeroImages {
   static const String kassai =
       'https://dhhim4ltzu1pj.cloudfront.net/media/images/hvy_titlescreen_kassai_of_the_g.width-10000.format-webp.webp';
   static const String kayo =
-      'https://dhhim4ltzu1pj.cloudfront.net/media/images/hvy_titlescreen_kayo.width-10000.format-webp.webp';
+      'https://cdn.cardsrealm.com/images/cartas/hvy-heavy-hitters/EN/crop-med/kayo-armed-and-dangerous-hvy001.jpeg?3333';
   static const String olympia =
       'https://dhhim4ltzu1pj.cloudfront.net/media/images/hvy_titlescreen_olympia.width-10000.format-webp.webp';
   static const String victorGoldmane =
       'https://dhhim4ltzu1pj.cloudfront.net/media/images/hvy_titlescreen_victor.width-10000.format-webp.webp';
 
   // 2023
-  static const String dash = '';
+  static const String dash = 'https://i.etsystatic.com/43401833/r/il/46846f/5370237414/il_1080xN.5370237414_c42m.jpg';
   static const String maxx =
       'https://dhhim4ltzu1pj.cloudfront.net/media/images/M-BOOST_Moonshot_JessadaSutthi.width-992.format-webp.webp';
   static const String teklovossen = '';
@@ -76,7 +76,7 @@ class ClassicHeroImages {
   static const String boltyn =
       'https://dhhim4ltzu1pj.cloudfront.net/media/images/bol_main_hero_image_001.width-992.format-webp.webp';
   static const String chane = '';
-  static const String levia = '';
+  static const String levia = 'https://dhhim4ltzu1pj.cloudfront.net/media/images/Wisnu_Tan_-_Levia_Shadowborn_Abom.width-992.format-webp.webp';
 
   // 2020
   static const String benji = '';
@@ -87,15 +87,15 @@ class ClassicHeroImages {
       'https://dhhim4ltzu1pj.cloudfront.net/media/images/azalea.width-992.format-webp.webp';
   static const String kano =
       'https://www.cardtrader.com/uploads/blueprints/image/218176/show_kano-dracai-of-aether-marvel-history-pack-1-black-label.png';
-  static const String viserai = '';
+  static const String viserai = 'https://fabmeta.net/web_data/images/heroes/avatar/viserai.jpg';
 
   // 2019
   static const String dorinthea =
       'https://www.cardtrader.com/uploads/blueprints/image/218174/show_dorinthea-ironsong-marvel-history-pack-1-black-label.png';
   static const String katsu = '';
   static const String rhinar =
-      'https://dhhim4ltzu1pj.cloudfront.net/media/images/hvy_titlescreen_rhinar.width-10000.format-webp.webp';
+      'https://www.cardtrader.com/uploads/blueprints/image/218177/rhinar-reckless-rampage-marvel-history-pack-1-black-label.jpg';
 
   // 2018
-  static const String ira = '';
+  static const String ira = 'https://i.ytimg.com/vi/WGmziK8nzHc/maxresdefault.jpg';
 }

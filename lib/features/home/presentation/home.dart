@@ -46,7 +46,7 @@ class _HomeState extends State<Home> {
     try {
       final fetchedValues = await playerHeroDataSource.fetchSheetData(
         sheetName: selectedSheet,
-        range: 'A3:E30', // Defina o range adequado para cada planilha
+        range: 'G3:K35', // Defina o range adequado para cada planilha
       );
       setState(() {
         values = fetchedValues;

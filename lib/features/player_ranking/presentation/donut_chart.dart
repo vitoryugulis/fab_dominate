@@ -1,6 +1,15 @@
+import 'dart:async';
 import 'dart:math';
+import 'dart:typed_data';
 import 'dart:ui' as ui;
+import 'package:dev/core/constants/classic_hero_images.dart';
+import 'package:dev/core/constants/hero_image_mapper.dart';
+import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+
+final proxyUrl = 'https://cors-anywhere.herokuapp.com/';
 
 class PlayersDonutChart extends StatefulWidget {
   final List<List<String>> values;
@@ -12,26 +21,67 @@ class PlayersDonutChart extends StatefulWidget {
 }
 
 class _PlayersDonutChartState extends State<PlayersDonutChart> {
-  ui.Image? image;
+  final Map<String, ui.Image> heroImages = {};
   ui.Image? centerImage;
 
   @override
   void initState() {
     super.initState();
-    _loadImages();
+    _loadAllHeroImages();
   }
 
-  Future<void> _loadImages() async {
-    final florian = await _loadImage('lib/assets/florian.png');
-    final fab = await _loadImage('lib/assets/fab.png');
+  Future<void> _loadAllHeroImages() async {
+    final futures = widget.values.map((row) async {
+      final name = row.isNotEmpty ? row[0] : 'Unknown';
+      final imageUrl = HeroImageMapper.getImageUrl(name);
+
+      final image = await _loadNetworkImage(imageUrl ?? '');
+      if (image != null) {
+        heroImages[name] = image;
+      }
+    }).toList();
+
+    await Future.wait(futures);
+
+    final center = await _loadAssetImage('lib/assets/fab.png');
+    if (!mounted) return;
     setState(() {
-      image = florian;
-      centerImage = fab;
+      centerImage = center;
     });
   }
 
-  Future<ui.Image> _loadImage(String assetPath) async {
-    final data = await DefaultAssetBundle.of(context).load(assetPath);
+  /// 🔥 Função robusta para carregar imagem de rede
+  Future<ui.Image?> _loadNetworkImage(String url) async {
+    url = url.isEmpty ? ClassicHeroImages.other : url;
+    try {
+      Uint8List bytes;
+
+      if (kIsWeb) {
+        // 🔥 Web usa Dio diretamente
+        final response = await Dio().get<List<int>>(
+          url,
+          options: Options(responseType: ResponseType.bytes),
+        );
+        bytes = Uint8List.fromList(response.data!);
+      } else {
+        // 🔥 Mobile/desktop podem usar NetworkAssetBundle ou Dio
+        final uri = Uri.parse(url);
+        final byteData = await NetworkAssetBundle(uri).load("");
+        bytes = byteData.buffer.asUint8List();
+      }
+
+      final codec = await ui.instantiateImageCodec(bytes);
+      final frame = await codec.getNextFrame();
+      return frame.image;
+    } catch (e) {
+      debugPrint('Erro ao carregar imagem da url $url: $e');
+      return null;
+    }
+  }
+
+  /// 🔥 Carregar imagem de asset
+  Future<ui.Image?> _loadAssetImage(String assetPath) async {
+    final data = await rootBundle.load(assetPath);
     final codec = await ui.instantiateImageCodec(data.buffer.asUint8List());
     final frame = await codec.getNextFrame();
     return frame.image;
@@ -49,9 +99,9 @@ class _PlayersDonutChartState extends State<PlayersDonutChart> {
     final totalWins = data.fold<int>(
         0, (previous, element) => previous + (element['wins'] as int));
 
-    if (image == null || centerImage == null) {
-      return const Center(child: CircularProgressIndicator());
-    }
+    // if (heroImages.length < data.length || centerImage == null) {
+    //   return const Center(child: CircularProgressIndicator());
+    // }
 
     return AspectRatio(
       aspectRatio: 1,
@@ -62,13 +112,12 @@ class _PlayersDonutChartState extends State<PlayersDonutChart> {
             painter: DonutChartPainter(
               data: data,
               totalWins: totalWins,
-              image: image!,
+              heroImages: heroImages,
             ),
           ),
-          // 🔥 Imagem no centro, circular
           Center(
             child: Container(
-              width: 220, // 🔧 Ajuste o tamanho conforme desejar
+              width: 220,
               height: 220,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
@@ -81,7 +130,7 @@ class _PlayersDonutChartState extends State<PlayersDonutChart> {
                   )
                 ],
                 image: DecorationImage(
-                  image: AssetImage('lib/assets/fab.png'),
+                  image: const AssetImage('lib/assets/fab.png'),
                   fit: BoxFit.cover,
                 ),
               ),
@@ -93,16 +142,15 @@ class _PlayersDonutChartState extends State<PlayersDonutChart> {
   }
 }
 
-/// 🎨 Painter que desenha o Donut com sombra nas bordas e imagens alinhadas
 class DonutChartPainter extends CustomPainter {
   final List<Map<String, dynamic>> data;
   final int totalWins;
-  final ui.Image image;
+  final Map<String, ui.Image> heroImages;
 
   DonutChartPainter({
     required this.data,
     required this.totalWins,
-    required this.image,
+    required this.heroImages,
   });
 
   @override
@@ -112,7 +160,6 @@ class DonutChartPainter extends CustomPainter {
     final innerRadius = outerRadius * 0.6;
     double startAngle = -pi / 2;
 
-    // Sombra nas bordas do donut (blur suave)
     final shadowPaint = Paint()
       ..color = Colors.black.withOpacity(0.3)
       ..style = PaintingStyle.stroke
@@ -126,8 +173,8 @@ class DonutChartPainter extends CustomPainter {
 
     canvas.drawPath(shadowPath, shadowPaint);
 
-    // Desenha os segmentos do donut com imagens
     for (var item in data) {
+      final name = item['name'] as String;
       final wins = item['wins'] as int;
       final sweepAngle = (wins / totalWins) * 2 * pi;
 
@@ -175,15 +222,18 @@ class DonutChartPainter extends CustomPainter {
         height: imageSize.height,
       );
 
-      paintImage(
-        canvas: canvas,
-        rect: imageRect,
-        image: image,
-        fit: BoxFit.cover,
-      );
+      final image = heroImages[name];
+
+      if (image != null) {
+        paintImage(
+          canvas: canvas,
+          rect: imageRect,
+          image: image,
+          fit: BoxFit.cover,
+        );
+      }
 
       canvas.restore();
-
       startAngle += sweepAngle;
     }
   }
