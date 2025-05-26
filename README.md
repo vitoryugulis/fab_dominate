@@ -24,5 +24,8 @@ flutter build web --release --base-href="/" --output=build/webdev --dart-define=
 
 ## Build Prod
 ```bash
-flutter build web --base-href="/liga_commoner_13dominate/" --release --dart-define=FLAVOR=prod
+flutter build web --base-href="/liga_commoner_13dominate/" --release --dart-define=FLAVOR=prod --dart-define=API_KEY=API_KEY
 ```
+
+## Release to GHPages:
+Run the Deploy and Build Github Action
