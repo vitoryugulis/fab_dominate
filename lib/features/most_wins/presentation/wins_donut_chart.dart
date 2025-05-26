@@ -1,8 +1,8 @@
 import 'dart:async';
 import 'dart:math';
 import 'dart:ui' as ui;
-import 'package:dev/core/constants/classic_hero_images.dart';
-import 'package:dev/core/constants/hero_image_mapper.dart';
+import 'package:dev/core/constants/heroes/classic_hero_images.dart';
+import 'package:dev/core/constants/heroes/hero_image_mapper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';

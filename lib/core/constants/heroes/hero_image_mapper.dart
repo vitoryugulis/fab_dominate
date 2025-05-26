@@ -1,5 +1,5 @@
-import 'package:dev/core/constants/classic_hero_images.dart';
-import 'package:dev/core/constants/hero_names.dart';
+import 'package:dev/core/constants/heroes/classic_hero_images.dart';
+import 'package:dev/core/constants/heroes/hero_names.dart';
 
 class HeroImageMapper {
   static const Map<String, String> heroImageMap = {

@@ -3,10 +3,10 @@ import 'package:dev/features/most_wins/presentation/wins_donut_chart.dart';
 import 'package:flutter/material.dart';
 
 /// 🔥 Widget principal que combina a Tabela + Gráfico
-class PlayersRankingWithChart extends StatelessWidget {
+class RankingTable extends StatelessWidget {
   final List<List<String>> values;
 
-  const PlayersRankingWithChart({super.key, required this.values});
+  const RankingTable({super.key, required this.values});
 
   @override
   Widget build(BuildContext context) {
