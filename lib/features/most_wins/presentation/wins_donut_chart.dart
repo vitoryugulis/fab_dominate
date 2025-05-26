@@ -90,14 +90,14 @@ class _PlayersDonutChartState extends State<WinsDonutChart> {
           ),
           Center(
             child: Container(
-              width: OriginDevice.isMobileWeb()
+              width: !OriginDevice.isMobileWeb()
                   ? max(
                       230,
                       min(MediaQuery.of(context).size.width * 0.25,
                           370)) // Mínimo de 200 e máximo de 370 para web
                   : MediaQuery.of(context).size.width *
                       0.55, // Largura para mobile
-              height: OriginDevice.isMobileWeb()
+              height: !OriginDevice.isMobileWeb()
                   ? max(
                       230,
                       min(MediaQuery.of(context).size.width * 0.25,
@@ -191,7 +191,7 @@ class DonutChartPainter extends CustomPainter {
 
       final middleAngle = startAngle + sweepAngle / 2;
       final radius = (outerRadius + innerRadius) / 2;
-      final offsetY = kIsWeb ? 50.0 : 30;
+      final offsetY = !OriginDevice.isMobileWeb() ? 50.0 : 20;
 
       final imageCenter = Offset(
         center.dx + radius * cos(middleAngle),
