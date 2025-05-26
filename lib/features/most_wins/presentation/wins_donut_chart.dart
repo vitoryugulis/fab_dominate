@@ -3,6 +3,7 @@ import 'dart:math';
 import 'dart:ui' as ui;
 import 'package:dev/core/constants/heroes/classic_hero_assets.dart';
 import 'package:dev/core/constants/heroes/hero_image_mapper.dart';
+import 'package:dev/core/utils/origin_device.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -89,14 +90,14 @@ class _PlayersDonutChartState extends State<WinsDonutChart> {
           ),
           Center(
             child: Container(
-              width: kIsWeb
+              width: OriginDevice.isMobileWeb()
                   ? max(
                       230,
                       min(MediaQuery.of(context).size.width * 0.25,
                           370)) // Mínimo de 200 e máximo de 370 para web
                   : MediaQuery.of(context).size.width *
                       0.55, // Largura para mobile
-              height: kIsWeb
+              height: OriginDevice.isMobileWeb()
                   ? max(
                       230,
                       min(MediaQuery.of(context).size.width * 0.25,

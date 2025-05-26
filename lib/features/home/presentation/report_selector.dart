@@ -1,9 +1,9 @@
 import 'package:dev/core/constants/app_colors.dart';
+import 'package:dev/core/utils/origin_device.dart';
 import 'package:dev/features/most_wins/presentation/wins_donut_chart.dart';
 import 'package:dev/features/player_ranking/presentation/ranking_table.dart';
 import 'package:dev/features/player_ranking/presentation/ranking_table_mobile.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/foundation.dart'; // Para usar kIsWeb
 
 class ReportSelectorMenu extends StatefulWidget {
   final List<List<String>> values;
@@ -21,7 +21,6 @@ class ReportSelectorMenu extends StatefulWidget {
 
 class _ReportSelectorMenuState extends State<ReportSelectorMenu> {
   String selectedReport = 'Ranking';
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -67,9 +66,9 @@ class _ReportSelectorMenuState extends State<ReportSelectorMenu> {
             child: () {
               switch (selectedReport) {
                 case 'Ranking':
-                  return kIsWeb
-                      ? RankingTable(values: widget.values)
-                      : RankingTableMobile(values: widget.values);
+                  return OriginDevice.isMobileWeb()
+                      ? RankingTableMobile(values: widget.values)
+                      : RankingTable(values: widget.values);
                 case 'Wins Donut Chart':
                   return LayoutBuilder(
                     builder: (context, constraints) {
