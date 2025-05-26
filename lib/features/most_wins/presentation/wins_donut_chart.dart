@@ -76,6 +76,13 @@ class _PlayersDonutChartState extends State<WinsDonutChart> {
       return const Center(child: CircularProgressIndicator());
     }
 
+    final double minSize = OriginDevice.isMobileWeb() ? 100 : 370;
+    final double maxSize = 230;
+
+    final double centralLogoSize = !OriginDevice.isMobileWeb()
+        ? max(maxSize, min(MediaQuery.of(context).size.width * 0.25, minSize))
+        : MediaQuery.of(context).size.width * 0.55;
+
     return AspectRatio(
       aspectRatio: 1,
       child: Stack(
@@ -90,20 +97,8 @@ class _PlayersDonutChartState extends State<WinsDonutChart> {
           ),
           Center(
             child: Container(
-              width: !OriginDevice.isMobileWeb()
-                  ? max(
-                      230,
-                      min(MediaQuery.of(context).size.width * 0.25,
-                          370)) // Mínimo de 200 e máximo de 370 para web
-                  : MediaQuery.of(context).size.width *
-                      0.55, // Largura para mobile
-              height: !OriginDevice.isMobileWeb()
-                  ? max(
-                      230,
-                      min(MediaQuery.of(context).size.width * 0.25,
-                          370)) // Mínimo de 200 e máximo de 370 para web
-                  : MediaQuery.of(context).size.width *
-                      0.55, // Altura para mobile
+              width: centralLogoSize,
+              height: centralLogoSize,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 color: Colors.black,

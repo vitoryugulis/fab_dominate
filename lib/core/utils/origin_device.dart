@@ -1,15 +1,18 @@
-//import 'package:flutter/foundation.dart';
+import 'package:universal_html/html.dart' as html;
 
-import 'package:flutter/foundation.dart';
+const appleType = "apple";
+const androidType = "android";
+const desktopType = "desktop";
 
 class OriginDevice {
   static bool isMobileWeb() {
-    try {
-      final userAgent =
-          (Uri.base.queryParameters['userAgent'] ?? '').toLowerCase();
-      return userAgent.contains('android') || userAgent.contains('iphone') || !kIsWeb;
-    } catch (e) {
-      return false;
-    }
+    final userAgent = html.window.navigator.userAgent.toString().toLowerCase();
+    // smartphone
+    if (userAgent.contains("iphone")) return true;
+    if (userAgent.contains("android")) return true;
+
+    // tablet
+    if (userAgent.contains("ipad")) return true;
+    return false;
   }
 }
