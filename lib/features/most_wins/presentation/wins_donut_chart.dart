@@ -1,12 +1,11 @@
 import 'dart:async';
 import 'dart:math';
 import 'dart:ui' as ui;
-import 'package:dev/core/constants/heroes/classic_hero_images.dart';
+import 'package:dev/core/constants/heroes/classic_hero_assets.dart';
 import 'package:dev/core/constants/heroes/hero_image_mapper.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 
 class WinsDonutChart extends StatefulWidget {
   final List<List<String>> values;
@@ -30,9 +29,9 @@ class _PlayersDonutChartState extends State<WinsDonutChart> {
   Future<void> _loadAllHeroImages() async {
     final futures = widget.values.map((row) async {
       final name = row.isNotEmpty ? row[0] : 'Unknown';
-      final imageUrl = HeroImageMapper.getImageUrl(name);
+      final assetPath = HeroImageMapper.getImageUrl(name) ?? '';
 
-      final image = await _loadNetworkImage(imageUrl ?? '');
+      final image = await _loadAssetImage(assetPath);
       if (image != null) {
         heroImages[name] = image;
       }
@@ -47,28 +46,17 @@ class _PlayersDonutChartState extends State<WinsDonutChart> {
     });
   }
 
-  /// 🔥 Função robusta para carregar imagem de rede
-  Future<ui.Image?> _loadNetworkImage(String url) async {
-    url = url.isEmpty ? ClassicHeroImages.other : url;
+  Future<ui.Image?> _loadAssetImage(String assetPath) async {
+    assetPath = assetPath.isEmpty ? ClassicHeroAssets.other : assetPath;
     try {
-      final file = await DefaultCacheManager().getSingleFile(url);
-      final bytes = await file.readAsBytes();
-
-      final codec = await ui.instantiateImageCodec(bytes);
+      final data = await rootBundle.load(assetPath);
+      final codec = await ui.instantiateImageCodec(data.buffer.asUint8List());
       final frame = await codec.getNextFrame();
       return frame.image;
     } catch (e) {
-      debugPrint('Erro ao carregar imagem da url $url: $e');
+      debugPrint('Erro ao carregar imagem do asset $assetPath: $e');
       return null;
     }
-  }
-
-  /// 🔥 Carregar imagem de asset
-  Future<ui.Image?> _loadAssetImage(String assetPath) async {
-    final data = await rootBundle.load(assetPath);
-    final codec = await ui.instantiateImageCodec(data.buffer.asUint8List());
-    final frame = await codec.getNextFrame();
-    return frame.image;
   }
 
   @override

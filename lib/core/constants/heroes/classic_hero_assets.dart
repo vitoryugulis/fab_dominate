@@ -5,6 +5,7 @@ class ClassicHeroAssets {
   static const String arakni = 'lib/assets/heroes/chaos_story.webp';
   static const String slippy = 'lib/assets/heroes/slippy_cover.webp';
   static const String other = 'lib/assets/heroes/sea_preview_cover.webp';
+  static const String fab = 'lib/assets/fab.jpg';
 
   // 2024
   static const String jarl = 'lib/assets/heroes/jarl_art.jpg';
@@ -26,6 +27,7 @@ class ClassicHeroAssets {
   static const String prism = 'lib/assets/heroes/prism.jpg';
   static const String vynnset = 'lib/assets/heroes/vynnset.webp';
   static const String riptide = 'lib/assets/heroes/riptide.webp';
+  static const String maxx = 'lib/assets/heroes/maxx.webp';
 
   // 2021
   static const String boltyn = 'lib/assets/heroes/boltyn.webp';
