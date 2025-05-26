@@ -71,12 +71,12 @@ flutter:
 #    - dev.env
 #    - .env
     - lib/assets/fab.jpg
-    - lib/assets/heroes/cindra_cover.webp
+    - lib/assets/heroes/cindra.png
     - lib/assets/heroes/fang_story.webp
-    - lib/assets/heroes/chaos_story.webp
-    - lib/assets/heroes/slippy_cover.webp
+    - lib/assets/heroes/arakniMario.png
+    - lib/assets/heroes/arakniSlippy.png
     - lib/assets/heroes/sea_preview_cover.webp
-    - lib/assets/heroes/jarl_art.jpg
+    - lib/assets/heroes/jarl.png
     - lib/assets/heroes/aurora_cover.webp
     - lib/assets/heroes/florian_cover.webp
     - lib/assets/heroes/oscilio_cover.webp
