@@ -2,6 +2,10 @@
 
 Fab 13 Dominate
 
+## Requirements
+- Flutter SDK 3.27.1
+- Dart SDK ^3.6.0
+
 ## run local
 ```bash
 flutter pub get
