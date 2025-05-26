@@ -3,6 +3,7 @@ import 'dart:math';
 import 'dart:ui' as ui;
 import 'package:dev/core/constants/heroes/classic_hero_images.dart';
 import 'package:dev/core/constants/heroes/hero_image_mapper.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
@@ -100,8 +101,20 @@ class _PlayersDonutChartState extends State<WinsDonutChart> {
           ),
           Center(
             child: Container(
-              width: 380,
-              height: 380,
+              width: kIsWeb
+                  ? max(
+                      230,
+                      min(MediaQuery.of(context).size.width * 0.25,
+                          370)) // Mínimo de 200 e máximo de 370 para web
+                  : MediaQuery.of(context).size.width *
+                      0.55, // Largura para mobile
+              height: kIsWeb
+                  ? max(
+                      230,
+                      min(MediaQuery.of(context).size.width * 0.25,
+                          370)) // Mínimo de 200 e máximo de 370 para web
+                  : MediaQuery.of(context).size.width *
+                      0.55, // Altura para mobile
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 color: Colors.black,
@@ -189,7 +202,7 @@ class DonutChartPainter extends CustomPainter {
 
       final middleAngle = startAngle + sweepAngle / 2;
       final radius = (outerRadius + innerRadius) / 2;
-      final offsetY = 40.0;
+      final offsetY = kIsWeb? 50.0 : 30;
 
       final imageCenter = Offset(
         center.dx + radius * cos(middleAngle),
