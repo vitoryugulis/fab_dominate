@@ -32,7 +32,7 @@ class HeroImageMapper {
     HeroNames.fangDracai: ClassicHeroImages.fang,
     HeroNames.viserai: ClassicHeroImages.viserai,
     HeroNames.dashIO: ClassicHeroImages.dash,
-    HeroNames.levia: ClassicHeroImages.levia,
+    HeroNames.leviaShadow: ClassicHeroImages.levia,
   };
 
   static String? getImageUrl(String heroName) {

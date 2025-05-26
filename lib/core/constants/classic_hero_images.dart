@@ -97,5 +97,5 @@ class ClassicHeroImages {
       'https://www.cardtrader.com/uploads/blueprints/image/218177/rhinar-reckless-rampage-marvel-history-pack-1-black-label.jpg';
 
   // 2018
-  static const String ira = 'https://i.ytimg.com/vi/WGmziK8nzHc/maxresdefault.jpg';
+  static const String ira = 'https://files.dragonshield.com/fab/artcrop/8901.jpg';
 }

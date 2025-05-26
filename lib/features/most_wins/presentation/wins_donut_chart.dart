@@ -3,21 +3,20 @@ import 'dart:math';
 import 'dart:ui' as ui;
 import 'package:dev/core/constants/classic_hero_images.dart';
 import 'package:dev/core/constants/hero_image_mapper.dart';
-import 'package:dio/dio.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 
-class PlayersDonutChart extends StatefulWidget {
+class WinsDonutChart extends StatefulWidget {
   final List<List<String>> values;
 
-  const PlayersDonutChart({super.key, required this.values});
+  const WinsDonutChart({super.key, required this.values});
 
   @override
-  State<PlayersDonutChart> createState() => _PlayersDonutChartState();
+  State<WinsDonutChart> createState() => _PlayersDonutChartState();
 }
 
-class _PlayersDonutChartState extends State<PlayersDonutChart> {
+class _PlayersDonutChartState extends State<WinsDonutChart> {
   final Map<String, ui.Image> heroImages = {};
   ui.Image? centerImage;
 
@@ -40,7 +39,7 @@ class _PlayersDonutChartState extends State<PlayersDonutChart> {
 
     await Future.wait(futures);
 
-    final center = await _loadAssetImage('lib/assets/fab.png');
+    final center = await _loadAssetImage('lib/assets/fab.jpg');
     if (!mounted) return;
     setState(() {
       centerImage = center;
@@ -51,21 +50,8 @@ class _PlayersDonutChartState extends State<PlayersDonutChart> {
   Future<ui.Image?> _loadNetworkImage(String url) async {
     url = url.isEmpty ? ClassicHeroImages.other : url;
     try {
-      Uint8List bytes;
-
-      if (kIsWeb) {
-        // 🔥 Web usa Dio diretamente
-        final response = await Dio().get<List<int>>(
-          url,
-          options: Options(responseType: ResponseType.bytes),
-        );
-        bytes = Uint8List.fromList(response.data!);
-      } else {
-        // 🔥 Mobile/desktop podem usar NetworkAssetBundle ou Dio
-        final uri = Uri.parse(url);
-        final byteData = await NetworkAssetBundle(uri).load("");
-        bytes = byteData.buffer.asUint8List();
-      }
+      final file = await DefaultCacheManager().getSingleFile(url);
+      final bytes = await file.readAsBytes();
 
       final codec = await ui.instantiateImageCodec(bytes);
       final frame = await codec.getNextFrame();
@@ -96,9 +82,9 @@ class _PlayersDonutChartState extends State<PlayersDonutChart> {
     final totalWins = data.fold<int>(
         0, (previous, element) => previous + (element['wins'] as int));
 
-    // if (heroImages.length < data.length || centerImage == null) {
-    //   return const Center(child: CircularProgressIndicator());
-    // }
+    if (data.isEmpty || centerImage == null) {
+      return const Center(child: CircularProgressIndicator());
+    }
 
     return AspectRatio(
       aspectRatio: 1,
@@ -114,8 +100,8 @@ class _PlayersDonutChartState extends State<PlayersDonutChart> {
           ),
           Center(
             child: Container(
-              width: 220,
-              height: 220,
+              width: 380,
+              height: 380,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 color: Colors.black,
@@ -127,8 +113,8 @@ class _PlayersDonutChartState extends State<PlayersDonutChart> {
                   )
                 ],
                 image: DecorationImage(
-                  image: const AssetImage('lib/assets/fab.png'),
-                  fit: BoxFit.cover,
+                  image: const AssetImage('lib/assets/fab.jpg'),
+                  fit: BoxFit.fitWidth,
                 ),
               ),
             ),
@@ -203,14 +189,18 @@ class DonutChartPainter extends CustomPainter {
 
       final middleAngle = startAngle + sweepAngle / 2;
       final radius = (outerRadius + innerRadius) / 2;
+      final offsetY = 40.0;
+
       final imageCenter = Offset(
         center.dx + radius * cos(middleAngle),
-        center.dy + radius * sin(middleAngle),
+        center.dy + radius * sin(middleAngle) + offsetY,
       );
+      final sweepRatio = sweepAngle / (2 * pi);
+      final zoomFactor = ui.lerpDouble(1.8, 2.9, sweepRatio) ?? 2.0;
 
       final imageSize = Size(
-        (outerRadius - innerRadius) * 1.5,
-        (outerRadius - innerRadius) * 1.5,
+        (outerRadius - innerRadius) * zoomFactor,
+        (outerRadius - innerRadius) * zoomFactor,
       );
 
       final imageRect = Rect.fromCenter(

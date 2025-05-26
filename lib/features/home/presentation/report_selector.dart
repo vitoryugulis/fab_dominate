@@ -1,6 +1,6 @@
 import 'package:dev/core/constants/app_colors.dart';
 import 'package:dev/features/most_wins/presentation/wins_bar_chart.dart';
-import 'package:dev/features/most_wins/presentation/wins_pie_chart.dart'; // importe o WinsPieChart
+import 'package:dev/features/most_wins/presentation/wins_donut_chart.dart';
 import 'package:dev/features/player_ranking/presentation/ranking_table.dart';
 import 'package:flutter/material.dart';
 
@@ -32,17 +32,19 @@ class _ReportSelectorMenuState extends State<ReportSelectorMenu> {
             child: ToggleButtons(
               isSelected: [
                 selectedReport == 'Ranking',
-                selectedReport == 'Wins Bar Chart',
-                selectedReport == 'Wins Pie Chart',
+                // selectedReport == 'Wins Bar Chart',
+                selectedReport == 'Wins Donut Chart',
               ],
               onPressed: (index) {
                 setState(() {
                   if (index == 0) {
                     selectedReport = 'Ranking';
-                  } else if (index == 1) {
-                    selectedReport = 'Wins Bar Chart';
-                  } else {
-                    selectedReport = 'Wins Pie Chart';
+                  }
+                  // else if (index == 1) {
+                  //   selectedReport = 'Wins Bar Chart';
+                  // }
+                  else {
+                    selectedReport = 'Wins Donut Chart';
                   }
                 });
               },
@@ -57,13 +59,13 @@ class _ReportSelectorMenuState extends State<ReportSelectorMenu> {
                   padding: EdgeInsets.symmetric(horizontal: 16),
                   child: Text('Ranking'),
                 ),
+                // Padding(
+                //   padding: EdgeInsets.symmetric(horizontal: 16),
+                //   child: Text('Wins Bar Chart'),
+                // ),
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 16),
-                  child: Text('Wins Bar Chart'),
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 16),
-                  child: Text('Wins Pie Chart'),
+                  child: Text('Wins Donut Chart'),
                 ),
               ],
             ),
@@ -75,13 +77,12 @@ class _ReportSelectorMenuState extends State<ReportSelectorMenu> {
                 case 'Ranking':
                   // return PlayersRankingTable(values: widget.values);
                   return PlayersRankingWithChart(values: widget.values);
-                case 'Wins Bar Chart':
-                  return WinsBarChart(values: widget.values);
-                case 'Wins Pie Chart':
+                // case 'Wins Bar Chart':
+                //   return WinsBarChart(values: widget.values);
+                case 'Wins Donut Chart':
                   return LayoutBuilder(
                     builder: (context, constraints) {
-                      final height = constraints.maxHeight *
-                          0.6; // 60% da altura disponível
+                      final height = constraints.maxHeight;
                       final width =
                           height; // tamanho quadrado para o círculo ficar redondo
 
@@ -89,7 +90,7 @@ class _ReportSelectorMenuState extends State<ReportSelectorMenu> {
                         child: SizedBox(
                           width: width,
                           height: height,
-                          child: WinsPieChart(values: widget.values),
+                          child: WinsDonutChart(values: widget.values),
                         ),
                       );
                     },
@@ -104,4 +105,3 @@ class _ReportSelectorMenuState extends State<ReportSelectorMenu> {
     );
   }
 }
-
