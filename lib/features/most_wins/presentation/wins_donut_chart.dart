@@ -191,7 +191,6 @@ class DonutChartPainter extends CustomPainter {
       final middleAngle = startAngle + sweepAngle / 2;
       final radius = (outerRadius + innerRadius) / 2;
       final offsetY = !OriginDevice.isMobileWeb() ? 50.0 : 20;
-      final offsetX = !OriginDevice.isMobileWeb() ? 20.0 : 20;
 
       final imageCenter = Offset(
         center.dx + radius * cos(middleAngle),
