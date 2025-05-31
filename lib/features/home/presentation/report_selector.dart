@@ -34,15 +34,15 @@ class _ReportSelectorMenuState extends State<ReportSelectorMenu> {
             padding: const EdgeInsets.all(16),
             child: ToggleButtons(
               isSelected: [
-                selectedReport == heroLabel,
                 selectedReport == playerLabel,
+                selectedReport == heroLabel,
               ],
               onPressed: (index) {
                 setState(() {
                   if (index == 0) {
-                    selectedReport = heroLabel;
-                  } else {
                     selectedReport = playerLabel;
+                  } else {
+                    selectedReport = heroLabel;
                   }
                 });
               },
@@ -55,11 +55,11 @@ class _ReportSelectorMenuState extends State<ReportSelectorMenu> {
               children: [
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 16),
-                  child: Text(heroLabel),
+                  child: Text(playerLabel),
                 ),
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 16),
-                  child: Text(playerLabel),
+                  child: Text(heroLabel),
                 ),
               ],
             ),
