@@ -17,15 +17,22 @@ class _HomeState extends State<Home> {
   late final PlayerHeroDataSource playerHeroDataSource;
   bool hasError = false;
 
-  String selectedSheet = 'Player Report - Março';
+  String selectedSheet = 'LIGA.SEA';
   final List<String> availableSheets = [
-    'Player Report - Março',
-    'Player Report - Geral',
-    'Hero Report - Geral',
+    'LIGA.SEA'
+    // 'Player Report - Março',
+    // 'Player Report - Geral',
+    // 'Hero Report - Geral',
   ];
 
-  List<List<String>> values = [];
-  Map<String, double> winsData = {};
+  // final String sheetRangePlayerReports = 'G3:K35';
+
+  //Liga Commoner 13 Dominate
+  final String sheetRangePlayers = 'B2:F35';
+  final String sheetRangeHeroes = 'G2:I30';
+
+  List<List<String>> playerData = [];
+  List<List<String>> heroData = [];
 
   @override
   void initState() {
@@ -40,34 +47,29 @@ class _HomeState extends State<Home> {
   Future<void> loadData() async {
     hasError = false;
     setState(() {
-      values = [];
+      playerData = [];
+      heroData = [];
     });
 
     try {
-      final fetchedValues = await playerHeroDataSource.fetchSheetData(
+      final playerSheet = await playerHeroDataSource.fetchSheetData(
         sheetName: selectedSheet,
-        range: 'G3:K35', // Defina o range adequado para cada planilha
+        range: sheetRangePlayers, // Defina o range adequado para cada planilha
       );
+
+      final heroSheet = await playerHeroDataSource.fetchSheetData(
+        sheetName: selectedSheet,
+        range: sheetRangeHeroes, // Defina o range adequado para cada planilha
+      );
+
       setState(() {
-        values = fetchedValues;
-        winsData = _generateWinsData(fetchedValues);
+        playerData = playerSheet;
+        heroData = heroSheet;
       });
     } catch (e) {
       hasError = true;
       debugPrint('Erro ao carregar dados: $e');
     }
-  }
-
-  Map<String, double> _generateWinsData(List<List<String>> data) {
-    final map = <String, double>{};
-    for (var row in data) {
-      if (row.length >= 2) {
-        final player = row[0];
-        final wins = double.tryParse(row[1]) ?? 0;
-        map[player] = wins;
-      }
-    }
-    return map;
   }
 
   @override
@@ -84,7 +86,6 @@ class _HomeState extends State<Home> {
       body: !hasError
           ? Column(
               children: [
-                // 👉 Menu de seleção da planilha
                 SheetSelectorMenu(
                   sheets: availableSheets,
                   selectedSheet: selectedSheet,
@@ -95,25 +96,24 @@ class _HomeState extends State<Home> {
                     loadData();
                   },
                 ),
-                // 👉 Conteúdo da planilha
                 Expanded(
-                  child: values.isEmpty
+                  child: heroData.isEmpty
                       ? const Center(
                           child: CircularProgressIndicator(
-                            color: AppColors.beigeLight,
+                            color: AppColors.primary,
                           ),
                         )
                       : ReportSelectorMenu(
-                          values: values,
-                          winsData: winsData,
+                          playerData: playerData,
+                          winsData: heroData,
                         ),
                 ),
               ],
             )
           : const Center(
               child: Text(
-                'Erro ao carregar dados',
-                style: TextStyle(color: AppColors.beigeLight),
+                'Erro ao carregar dados. Recarregue a tela ou peça ajuda ao administrador',
+                style: TextStyle(color: AppColors.primary),
               ),
             ),
     );
