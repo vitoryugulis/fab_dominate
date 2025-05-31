@@ -23,7 +23,7 @@ const String heroLabel = 'Ranking de Heróis';
 const String playerLabel = 'Ranking de jogadores';
 
 class _ReportSelectorMenuState extends State<ReportSelectorMenu> {
-  String selectedReport = heroLabel;
+  String selectedReport = playerLabel;
   @override
   Widget build(BuildContext context) {
     return Container(
