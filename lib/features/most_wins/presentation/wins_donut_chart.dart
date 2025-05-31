@@ -1,10 +1,10 @@
 import 'dart:async';
 import 'dart:math';
 import 'dart:ui' as ui;
-import 'package:dev/core/constants/heroes/classic_hero_assets.dart';
-import 'package:dev/core/constants/heroes/hero_image_mapper.dart';
+import 'package:dev/core/constants/constants.dart';
+import 'package:dev/core/constants/heroes/adult_hero_assets.dart';
+import 'package:dev/core/constants/heroes/young_hero_image_mapper.dart';
 import 'package:dev/core/utils/origin_device.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -20,6 +20,7 @@ class WinsDonutChart extends StatefulWidget {
 class _PlayersDonutChartState extends State<WinsDonutChart> {
   final Map<String, ui.Image> heroImages = {};
   ui.Image? centerImage;
+  Map<String, double> winsData = {};
 
   @override
   void initState() {
@@ -27,10 +28,22 @@ class _PlayersDonutChartState extends State<WinsDonutChart> {
     _loadAllHeroImages();
   }
 
+  Map<String, double> _generateWinsData(List<List<String>> data) {
+    final winsMap = <String, double>{};
+    for (var row in data) {
+      if (row.length >= 2) {
+        final hero = row[0];
+        final wins = double.tryParse(row[1]) ?? 0;
+        winsMap[hero] = wins;
+      }
+    }
+    return winsMap;
+  }
+
   Future<void> _loadAllHeroImages() async {
     final futures = widget.values.map((row) async {
-      final name = row.isNotEmpty ? row[0] : 'Unknown';
-      final assetPath = HeroImageMapper.getImageUrl(name) ?? '';
+      final name = row.isNotEmpty ? row[HeroReportColumns.name] : 'Unknown';
+      final assetPath = YoungHeroImageMapper.getImageUrl(name) ?? '';
 
       final image = await _loadAssetImage(assetPath);
       if (image != null) {
@@ -44,11 +57,12 @@ class _PlayersDonutChartState extends State<WinsDonutChart> {
     if (!mounted) return;
     setState(() {
       centerImage = center;
+      winsData = _generateWinsData(widget.values);
     });
   }
 
   Future<ui.Image?> _loadAssetImage(String assetPath) async {
-    assetPath = assetPath.isEmpty ? ClassicHeroAssets.other : assetPath;
+    assetPath = assetPath.isEmpty ? AdultHeroAssets.other : assetPath;
     try {
       final data = await rootBundle.load(assetPath);
       final codec = await ui.instantiateImageCodec(data.buffer.asUint8List());
@@ -62,17 +76,9 @@ class _PlayersDonutChartState extends State<WinsDonutChart> {
 
   @override
   Widget build(BuildContext context) {
-    final data = widget.values
-        .map((row) => {
-              'name': row.isNotEmpty ? row[0] : 'Unknown',
-              'wins': row.length > 1 ? int.tryParse(row[1]) ?? 0 : 0,
-            })
-        .toList();
+    final totalWins = winsData.values.fold(0.0, (a, b) => a + b);
 
-    final totalWins = data.fold<int>(
-        0, (previous, element) => previous + (element['wins'] as int));
-
-    if (data.isEmpty || centerImage == null) {
+    if (winsData.isEmpty || centerImage == null) {
       return const Center(child: CircularProgressIndicator());
     }
 
@@ -90,7 +96,7 @@ class _PlayersDonutChartState extends State<WinsDonutChart> {
           CustomPaint(
             size: Size.infinite,
             painter: DonutChartPainter(
-              data: data,
+              data: winsData,
               totalWins: totalWins,
               heroImages: heroImages,
             ),
@@ -123,8 +129,8 @@ class _PlayersDonutChartState extends State<WinsDonutChart> {
 }
 
 class DonutChartPainter extends CustomPainter {
-  final List<Map<String, dynamic>> data;
-  final int totalWins;
+  final Map<String, double> data;
+  final double totalWins;
   final Map<String, ui.Image> heroImages;
 
   DonutChartPainter({
@@ -153,9 +159,7 @@ class DonutChartPainter extends CustomPainter {
 
     canvas.drawPath(shadowPath, shadowPaint);
 
-    for (var item in data) {
-      final name = item['name'] as String;
-      final wins = item['wins'] as int;
+    data.forEach((name, wins) {
       final sweepAngle = (wins / totalWins) * 2 * pi;
 
       final path = Path()
@@ -193,7 +197,7 @@ class DonutChartPainter extends CustomPainter {
         center.dy + radius * sin(middleAngle) + offsetY,
       );
       final sweepRatio = sweepAngle / (2 * pi);
-      final zoomFactor = ui.lerpDouble(1.8, 2.9, sweepRatio) ?? 2.0;
+      final zoomFactor = ui.lerpDouble(2, 7, sweepRatio) ?? 2.0;
 
       final imageSize = Size(
         (outerRadius - innerRadius) * zoomFactor,
@@ -213,13 +217,13 @@ class DonutChartPainter extends CustomPainter {
           canvas: canvas,
           rect: imageRect,
           image: image,
-          fit: BoxFit.cover,
+          fit: BoxFit.fitHeight,
         );
       }
 
       canvas.restore();
       startAngle += sweepAngle;
-    }
+    });
   }
 
   @override

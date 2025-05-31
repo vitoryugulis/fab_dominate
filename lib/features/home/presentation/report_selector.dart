@@ -6,12 +6,12 @@ import 'package:dev/features/player_ranking/presentation/ranking_table_mobile.da
 import 'package:flutter/material.dart';
 
 class ReportSelectorMenu extends StatefulWidget {
-  final List<List<String>> values;
-  final Map<String, double> winsData;
+  final List<List<String>> playerData;
+  final List<List<String>> winsData;
 
   const ReportSelectorMenu({
     super.key,
-    required this.values,
+    required this.playerData,
     required this.winsData,
   });
 
@@ -19,8 +19,11 @@ class ReportSelectorMenu extends StatefulWidget {
   State<ReportSelectorMenu> createState() => _ReportSelectorMenuState();
 }
 
+const String heroLabel = 'Ranking de Heróis';
+const String playerLabel = 'Ranking de jogadores';
+
 class _ReportSelectorMenuState extends State<ReportSelectorMenu> {
-  String selectedReport = 'Ranking';
+  String selectedReport = playerLabel;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -31,15 +34,15 @@ class _ReportSelectorMenuState extends State<ReportSelectorMenu> {
             padding: const EdgeInsets.all(16),
             child: ToggleButtons(
               isSelected: [
-                selectedReport == 'Ranking',
-                selectedReport == 'Wins Donut Chart',
+                selectedReport == playerLabel,
+                selectedReport == heroLabel,
               ],
               onPressed: (index) {
                 setState(() {
                   if (index == 0) {
-                    selectedReport = 'Ranking';
+                    selectedReport = playerLabel;
                   } else {
-                    selectedReport = 'Wins Donut Chart';
+                    selectedReport = heroLabel;
                   }
                 });
               },
@@ -49,14 +52,14 @@ class _ReportSelectorMenuState extends State<ReportSelectorMenu> {
               color: AppColors.primary,
               borderColor: AppColors.beigeDark,
               selectedBorderColor: AppColors.beigeDark,
-              children: const [
+              children: [
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 16),
-                  child: Text('Ranking'),
+                  child: Text(playerLabel),
                 ),
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 16),
-                  child: Text('Wins Donut Chart'),
+                  child: Text(heroLabel),
                 ),
               ],
             ),
@@ -65,11 +68,11 @@ class _ReportSelectorMenuState extends State<ReportSelectorMenu> {
           Expanded(
             child: () {
               switch (selectedReport) {
-                case 'Ranking':
+                case playerLabel:
                   return OriginDevice.isMobileWeb()
-                      ? RankingTableMobile(values: widget.values)
-                      : RankingTable(values: widget.values);
-                case 'Wins Donut Chart':
+                      ? RankingTableMobile(values: widget.playerData)
+                      : RankingTable(values: widget.playerData);
+                case heroLabel:
                   return LayoutBuilder(
                     builder: (context, constraints) {
                       final height = constraints.maxHeight;
@@ -79,7 +82,7 @@ class _ReportSelectorMenuState extends State<ReportSelectorMenu> {
                         child: SizedBox(
                           width: width,
                           height: height,
-                          child: WinsDonutChart(values: widget.values),
+                          child: WinsDonutChart(values: widget.winsData),
                         ),
                       );
                     },

@@ -102,7 +102,44 @@ flutter:
     - lib/assets/heroes/dorinthea.png
     - lib/assets/heroes/rhinar.jpg
     - lib/assets/heroes/ira.jpg
-
+    - lib/assets/heroes/young/araknisolitaire.png
+    - lib/assets/heroes/young/arakniweb.png
+    - lib/assets/heroes/young/aurora.png
+    - lib/assets/heroes/young/aurora2.png
+    - lib/assets/heroes/young/azalea.png
+    - lib/assets/heroes/young/benji.png
+    - lib/assets/heroes/young/betsy.png
+    - lib/assets/heroes/young/boltyn.png
+    - lib/assets/heroes/young/cindra.png
+    - lib/assets/heroes/young/dash.png
+    - lib/assets/heroes/young/dashdatabase.png
+    - lib/assets/heroes/young/datadoll.png
+    - lib/assets/heroes/young/dori.png
+    - lib/assets/heroes/young/doridawn.png
+    - lib/assets/heroes/young/enigma.png
+    - lib/assets/heroes/young/fang.png
+    - lib/assets/heroes/young/ira.png
+    - lib/assets/heroes/young/kano.png
+    - lib/assets/heroes/young/kassai.png
+    - lib/assets/heroes/young/kassai1.png
+    - lib/assets/heroes/young/kayo.png
+    - lib/assets/heroes/young/kayo2.png
+    - lib/assets/heroes/young/levia.png
+    - lib/assets/heroes/young/nu.png
+    - lib/assets/heroes/young/enigma.png
+    - lib/assets/heroes/young/olympia.png
+    - lib/assets/heroes/young/oscilio.png
+    - lib/assets/heroes/young/rhinar.png
+    - lib/assets/heroes/young/riptide.png
+    - lib/assets/heroes/young/shivana.png
+    - lib/assets/heroes/young/victor.png
+    - lib/assets/heroes/young/visserai.png
+    - lib/assets/heroes/young/zen.png
+    - lib/assets/heroes/young/chane.png
+    - lib/assets/heroes/young/bravo.png
+    - lib/assets/heroes/young/fai.png
+    - lib/assets/heroes/young/lexi.png
+    - lib/assets/heroes/young/verdance.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
