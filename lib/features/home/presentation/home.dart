@@ -1,8 +1,11 @@
 import 'package:dev/core/constants/app_colors.dart';
 import 'package:dev/core/constants/constants.dart';
-import 'package:dev/features/home/data/datasources/player_hero/player_hero.dart';
+import 'package:dev/features/home/data/datasources/player_hero/player_hero_datasource.dart';
 import 'package:dev/features/home/presentation/report_selector.dart';
 import 'package:dev/features/home/presentation/sheet_selector.dart';
+import 'package:dev/features/rules/datasources/rules/rules_datasource.dart';
+import 'package:dev/features/rules/domain/entities/document.dart';
+import 'package:dev/features/rules/presentation/rules_page.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 
@@ -15,20 +18,19 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   late final PlayerHeroDataSource playerHeroDataSource;
+  late final RulesDatasource rulesDatasource;
+  final documentId = '1fizAV99bY_Fl5SA4QvjAOQRZH9qbEDW58jsQ-1eDXGs';
+
   bool hasError = false;
 
-  String selectedSheet = 'LIGA.SEA';
+  String selectedSheet = 'Liga.A';
   final List<String> availableSheets = [
-    'LIGA.SEA'
-    // 'Player Report - Março',
-    // 'Player Report - Geral',
-    // 'Hero Report - Geral',
+    'Liga.A',
+    'Liga.B',
+    'Liga.C',
   ];
 
-  // final String sheetRangePlayerReports = 'G3:K35';
-
-  //Liga Commoner 13 Dominate
-  final String sheetRangePlayers = 'B2:F35';
+  final String sheetRangePlayers = 'B3:F35';
   final String sheetRangeHeroes = 'G2:I30';
 
   List<List<String>> playerData = [];
@@ -41,6 +43,12 @@ class _HomeState extends State<Home> {
       dio: Dio(),
       apiKey: Credentials.apiKey,
     );
+
+    rulesDatasource = RulesDatasource(
+      dio: Dio(),
+      credentialsJson: Credentials.firebase.docsJson,
+    );
+
     loadData();
   }
 
@@ -52,14 +60,14 @@ class _HomeState extends State<Home> {
     });
 
     try {
-      final playerSheet = await playerHeroDataSource.fetchSheetData(
+      final playerSheet = await playerHeroDataSource.fetch(
         sheetName: selectedSheet,
-        range: sheetRangePlayers, // Defina o range adequado para cada planilha
+        range: sheetRangePlayers,
       );
 
-      final heroSheet = await playerHeroDataSource.fetchSheetData(
+      final heroSheet = await playerHeroDataSource.fetch(
         sheetName: selectedSheet,
-        range: sheetRangeHeroes, // Defina o range adequado para cada planilha
+        range: sheetRangeHeroes,
       );
 
       setState(() {
@@ -72,6 +80,32 @@ class _HomeState extends State<Home> {
     }
   }
 
+  Future<void> navigateToRulesPage() async {
+    try {
+      final document = await rulesDatasource.fetch();
+      final paragraphs = DocumentParser.extractParagraphs(document);
+      final imageUrl = DocumentParser.extractImage(document);
+
+      if (!mounted) return;
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => RulesPage(
+            paragraphs: paragraphs,
+            imageUrl: imageUrl,
+          ),
+        ),
+      );
+    } catch (e) {
+      debugPrint('Erro ao buscar regras: $e');
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Erro ao carregar as regras. Tente novamente.'),
+        ),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -79,8 +113,12 @@ class _HomeState extends State<Home> {
       appBar: AppBar(
         backgroundColor: const Color(0xFF393E46),
         title: Text(
-          'Relatórios - $selectedSheet',
+          'Liga Commoner 13 Dominate',
           style: const TextStyle(color: AppColors.beigeLight),
+        ),
+        leading: IconButton(
+          icon: const Icon(Icons.rule, color: AppColors.beigeLight),
+          onPressed: navigateToRulesPage,
         ),
       ),
       body: !hasError
