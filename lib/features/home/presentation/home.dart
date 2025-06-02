@@ -35,6 +35,8 @@ class _HomeState extends State<Home> {
 
   List<List<String>> playerData = [];
   List<List<String>> heroData = [];
+  List<String> paragraphs = [];
+  String? imageUrl;
 
   @override
   void initState() {
@@ -57,6 +59,8 @@ class _HomeState extends State<Home> {
     setState(() {
       playerData = [];
       heroData = [];
+      paragraphs = [];
+      imageUrl = null;
     });
 
     try {
@@ -70,33 +74,34 @@ class _HomeState extends State<Home> {
         range: sheetRangeHeroes,
       );
 
+      final document = await rulesDatasource.fetch();
+
       setState(() {
         playerData = playerSheet;
         heroData = heroSheet;
+        paragraphs = DocumentParser.extractParagraphs(document);
+        imageUrl = DocumentParser.extractImage(document);
       });
     } catch (e) {
-      hasError = true;
+      setState(() {
+        hasError = true;
+      });
       debugPrint('Erro ao carregar dados: $e');
     }
   }
 
   Future<void> navigateToRulesPage() async {
     try {
-      final document = await rulesDatasource.fetch();
-      final paragraphs = DocumentParser.extractParagraphs(document);
-      final imageUrl = DocumentParser.extractImage(document);
-
       if (!mounted) return;
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => RulesPage(
-            paragraphs: paragraphs,
-            imageUrl: imageUrl,
-          ),
+          builder: (context) =>
+              RulesPage(paragraphs: paragraphs, imageUrl: imageUrl),
         ),
       );
     } catch (e) {
+      // Fecha o diálogo de carregamento
       debugPrint('Erro ao buscar regras: $e');
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
@@ -111,16 +116,20 @@ class _HomeState extends State<Home> {
     return Scaffold(
       backgroundColor: AppColors.beigeLight,
       appBar: AppBar(
-        backgroundColor: const Color(0xFF393E46),
-        title: Text(
-          'Liga Commoner 13 Dominate',
-          style: const TextStyle(color: AppColors.beigeLight),
-        ),
-        leading: IconButton(
-          icon: const Icon(Icons.rule, color: AppColors.beigeLight),
-          onPressed: navigateToRulesPage,
-        ),
-      ),
+          backgroundColor: const Color(0xFF393E46),
+          title: Text(
+            'Liga Commoner 13 Dominate',
+            style: const TextStyle(color: AppColors.beigeLight),
+          ),
+          leading: Visibility(
+            visible: paragraphs.isNotEmpty,
+            child: IconButton(
+              icon: const Icon(Icons.rule, color: AppColors.beigeLight),
+              onPressed: () async {
+                await navigateToRulesPage();
+              },
+            ),
+          )),
       body: !hasError
           ? Column(
               children: [
