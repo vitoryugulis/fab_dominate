@@ -23227,28 +23227,32 @@ s=2
 return A.E(A.aiJ("prod"),$async$aio)
 case 2:return A.H(null,r)}})
 return A.I($async$aio,r)},
-aiJ(a){var s=0,r=A.J(t.H),q=1,p,o,n,m,l,k
+aiJ(a){var s=0,r=A.J(t.H),q=1,p,o,n,m,l,k,j
 var $async$aiJ=A.F(function(b,c){if(b===1){p=c
-s=q}while(true)switch(s){case 0:m=a==="dev"
-if(m)$.TB().gvm().i(0,"FIREBASE_APP_ID")
-$.aoY.b=""
-if(m)$.TB().gvm().i(0,"FIREBASE_API_KEY")
-$.aoX.b=""
-if(m)$.TB().gvm().i(0,"FIREBASE_MESSAGING_SENDER_ID")
-$.aoZ.b=""
-if(m)$.TB().gvm().i(0,"FIREBASE_PROJECT_ID")
-$.ap_.b=""
+s=q}while(true)switch(s){case 0:l=a==="dev"
+if(l){$.TB().gvm().i(0,"FIREBASE_APP_ID")
+n=""}else n="1:1065672073810:web:199169ec7f12c70864358b"
+$.aoY.b=n
+if(l){$.TB().gvm().i(0,"FIREBASE_API_KEY")
+n=""}else n="AIzaSyBe0QbwR_V0MP5OCwY6BAMQcBvE1Uw4dG4"
+$.aoX.b=n
+if(l){$.TB().gvm().i(0,"FIREBASE_MESSAGING_SENDER_ID")
+n=""}else n="1065672073810"
+$.aoZ.b=n
+if(l){$.TB().gvm().i(0,"FIREBASE_PROJECT_ID")
+n=""}else n="trezedominate"
+$.ap_.b=n
 q=3
-k=$.aoW
+j=$.aoW
 s=6
 return A.E(A.vo(),$async$aiJ)
-case 6:k.b=c
+case 6:j.b=c
 q=1
 s=5
 break
 case 3:q=2
-l=p
-o=A.a3(l)
+k=p
+o=A.a3(k)
 A.ty().$1(J.cl(o))
 s=5
 break
