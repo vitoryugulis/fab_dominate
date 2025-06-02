@@ -18,7 +18,13 @@ flutter build web --release --base-href="/" --output=build/webdev --dart-define=
 
 ## Build Prod
 ```bash
-flutter build web --base-href="/fab_dominate/" --release --dart-define=FLAVOR=prod --dart-define=API_KEY=API_KEY
+flutter build web --base-href="/fab_dominate/" --release \
+  --dart-define=FLAVOR=prod \
+  --dart-define=API_KEY=API_KEY \
+  --dart-define=FIREBASE_APP_ID=FIREBASE_APP_ID \
+  --dart-define=FIREBASE_API_KEY=FIREBASE_API_KEY \
+  --dart-define=FIREBASE_MESSAGING_SENDER_ID=FIREBASE_MESSAGING_SENDER_ID \
+  --dart-define=FIREBASE_PROJECT_ID=FIREBASE_PROJECT_ID
 ```
 
 ## Release to GHPages:
