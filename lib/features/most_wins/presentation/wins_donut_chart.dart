@@ -190,14 +190,16 @@ class DonutChartPainter extends CustomPainter {
 
       final middleAngle = startAngle + sweepAngle / 2;
       final radius = (outerRadius + innerRadius) / 2;
-      final offsetY = !OriginDevice.isMobileWeb() ? 50.0 : 20;
+      final offsetY = !OriginDevice.isMobileWeb() ? 80.0 : 50;
+      final offsetX = !OriginDevice.isMobileWeb() ? -10.0 : -10;
+      final faceZoom = 10;
 
       final imageCenter = Offset(
-        center.dx + radius * cos(middleAngle),
+        center.dx + radius * cos(middleAngle) + offsetX,
         center.dy + radius * sin(middleAngle) + offsetY,
       );
       final sweepRatio = sweepAngle / (2 * pi);
-      final zoomFactor = ui.lerpDouble(2, 7, sweepRatio) ?? 2.0;
+      final zoomFactor = ui.lerpDouble(2, faceZoom, sweepRatio) ?? 2.0;
 
       final imageSize = Size(
         (outerRadius - innerRadius) * zoomFactor,
@@ -217,7 +219,7 @@ class DonutChartPainter extends CustomPainter {
           canvas: canvas,
           rect: imageRect,
           image: image,
-          fit: BoxFit.fitHeight,
+          fit: BoxFit.cover,
         );
       }
 

@@ -97,11 +97,10 @@ class _HomeState extends State<Home> {
         context,
         MaterialPageRoute(
           builder: (context) =>
-              RulesPage(paragraphs: paragraphs, imageUrl: imageUrl),
+              RulesPage(rawTexts: paragraphs, imageUrl: imageUrl),
         ),
       );
     } catch (e) {
-      // Fecha o diálogo de carregamento
       debugPrint('Erro ao buscar regras: $e');
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
