@@ -5,7 +5,7 @@ class YoungHeroImageMapper {
   static const Map<String, String> heroImageMap = {
     YoungHeroNames.araknisolitaire: YoungHeroAssets.araknisolitaire,
     YoungHeroNames.arakniweb: YoungHeroAssets.arakniweb,
-    YoungHeroNames.aurora: YoungHeroAssets.aurora,
+    YoungHeroNames.aurora: YoungHeroAssets.aurora2,
     YoungHeroNames.azalea: YoungHeroAssets.azalea,
     YoungHeroNames.benji: YoungHeroAssets.benji,
     YoungHeroNames.betsy: YoungHeroAssets.betsy,

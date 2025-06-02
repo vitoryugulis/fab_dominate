@@ -75,11 +75,11 @@ class PlayersRankingTable extends StatelessWidget {
                   fontSize: 18,
                 ),
                 columns: const [
-                  DataColumn(label: Text('Player/Hero')),
-                  DataColumn(label: Text('Wins')),
-                  DataColumn(label: Text('Events')),
-                  DataColumn(label: Text('Rounds')),
-                  DataColumn(label: Text('WinRate')),
+                  DataColumn(label: Text('Jogador')),
+                  DataColumn(label: Text('Pontos')),
+                  DataColumn(label: Text('Win%')),
+                  DataColumn(label: Text('Vitórias')),
+                  DataColumn(label: Text('Rodadas')),
                 ],
                 rows: List<DataRow>.generate(
                   values.length,

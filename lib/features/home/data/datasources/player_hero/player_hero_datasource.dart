@@ -8,7 +8,7 @@ class PlayerHeroDataSource {
     required this.dio,
     required this.apiKey,
   });
-  Future<List<List<String>>> fetchSheetData({
+  Future<List<List<String>>> fetch({
     required String sheetName,
     String range = 'A1:Z1000', // range padrão
   }) async {

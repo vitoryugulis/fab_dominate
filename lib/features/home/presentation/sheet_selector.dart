@@ -1,4 +1,5 @@
 import 'package:dev/core/constants/app_colors.dart';
+import 'package:dev/features/home/domain/entities/store_name_selector.dart';
 import 'package:flutter/material.dart';
 
 class SheetSelectorMenu extends StatelessWidget {
@@ -22,14 +23,16 @@ class SheetSelectorMenu extends StatelessWidget {
         padding: const EdgeInsets.all(8),
         child: Row(
           children: sheets.map((sheet) {
+            final tabTitle = StoreNameSelector.find(sheet);
             final isSelected = sheet == selectedSheet;
             return Padding(
               padding: const EdgeInsets.symmetric(horizontal: 4),
               child: ChoiceChip(
                 label: Text(
-                  sheet,
+                  tabTitle,
                   style: TextStyle(
-                    color: isSelected ? AppColors.beigeLight : AppColors.beigeDark,
+                    color:
+                        isSelected ? AppColors.beigeLight : AppColors.beigeDark,
                   ),
                 ),
                 selected: isSelected,
