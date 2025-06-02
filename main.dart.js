@@ -38176,7 +38176,7 @@ A.a5k.prototype={
 $2(a,b){var s,r=null,q=J.aW(this.a.c,b),p=J.am(q),o=p.gbg(q)?p.i(q,0):"Unknown",n=p.gq(q)>1?p.i(q,1):"0",m=p.gq(q)>2?p.i(q,2):"0",l=p.gq(q)>3?p.i(q,3):"0",k=p.gq(q)>4?p.i(q,4):"0%",j=B.e.aZ(b,2)===0?$.anC():$.anB()
 p=A.DS(12)
 s=t.F
-return new A.pl(j,new A.cL(p,B.q),B.A7,new A.cd(B.d3,A.hL(A.b([new A.E8(A.e4(o.length!==0?o[0]:"?",B.Lg),B.aE,30,r),B.IV,A.XZ(A.VM(A.b([A.e4(o,B.MI),B.IX,A.hL(A.b([B.AN,B.f4,A.e4("Wins: "+n,r)],s),B.ao,B.a5,B.aq,r),B.h6,A.hL(A.b([B.AO,B.f4,A.e4("Events: "+m,r)],s),B.ao,B.a5,B.aq,r),B.h6,A.hL(A.b([B.AM,B.f4,A.e4("Rounds: "+l,r)],s),B.ao,B.a5,B.aq,r),B.h6,A.hL(A.b([B.AJ,B.f4,A.e4("WinRate: "+k,r)],s),B.ao,B.a5,B.aq,r)],s),B.aV,B.a5,B.aq,B.bj))],s),B.aV,B.a5,B.aq,r),r),r)},
+return new A.pl(j,new A.cL(p,B.q),B.A7,new A.cd(B.d3,A.hL(A.b([new A.E8(A.e4(o.length!==0?B.e.j(b+1):"?",B.Lg),B.aE,30,r),B.IV,A.XZ(A.VM(A.b([A.e4(o,B.MI),B.IX,A.hL(A.b([B.AN,B.f4,A.e4("Pontos: "+n,r)],s),B.ao,B.a5,B.aq,r),B.h6,A.hL(A.b([B.AO,B.f4,A.e4("Win%: "+m,r)],s),B.ao,B.a5,B.aq,r),B.h6,A.hL(A.b([B.AM,B.f4,A.e4("Vit\xf3rias: "+l,r)],s),B.ao,B.a5,B.aq,r),B.h6,A.hL(A.b([B.AJ,B.f4,A.e4("Rodadas: "+k,r)],s),B.ao,B.a5,B.aq,r)],s),B.aV,B.a5,B.aq,B.bj))],s),B.aV,B.a5,B.aq,r),r),r)},
 $S:321}
 A.FI.prototype={}
 A.a6T.prototype={
