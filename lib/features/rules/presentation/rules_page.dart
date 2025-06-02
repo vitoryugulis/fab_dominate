@@ -1,3 +1,4 @@
+import 'package:dev/core/constants/app_colors.dart';
 import 'package:flutter/material.dart';
 
 class RulesPage extends StatelessWidget {
@@ -32,10 +33,12 @@ class RulesPage extends StatelessWidget {
     final parsedParagraphs = _parseParagraphs(rawTexts);
 
     return Scaffold(
+      backgroundColor: AppColors.beigeLight,
       appBar: AppBar(
-        title: const Text('Regras da Liga Commoner'),
+        backgroundColor: const Color(0xFF393E46),
+        title: const Text('Regras da Liga Commoner', style: TextStyle(color: AppColors.beigeLight),),
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
+          icon: const Icon(Icons.arrow_back, color: AppColors.beigeLight,),
           onPressed: () {
             Navigator.of(context).pop(); // Volta para a página anterior
           },
