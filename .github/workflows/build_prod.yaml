@@ -29,7 +29,8 @@ jobs:
           FIREBASE_API_KEY: ${{ secrets.FIREBASE_API_KEY }}
           FIREBASE_MESSAGING_SENDER_ID: ${{ secrets.FIREBASE_MESSAGING_SENDER_ID }}
           FIREBASE_PROJECT_ID: ${{ secrets.FIREBASE_PROJECT_ID }}
-        run: flutter build web --release --base-href="/fab_dominate/" \
+        run: |
+          flutter build web --release --base-href="/fab_dominate/" \
           --dart-define=FLAVOR=prod \
           --dart-define=API_KEY=$API_KEY \
           --dart-define=FIREBASE_APP_ID=$FIREBASE_APP_ID \
