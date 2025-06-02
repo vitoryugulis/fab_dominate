@@ -74,6 +74,7 @@ flutter:
   assets:
 #    - dev.env
 #    - .env
+    - lib/assets/high_sea_bg.webp
     - lib/assets/fab.jpg
     - lib/assets/heroes/cindra.png
     - lib/assets/heroes/fang_story.webp

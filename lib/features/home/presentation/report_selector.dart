@@ -26,74 +26,88 @@ class _ReportSelectorMenuState extends State<ReportSelectorMenu> {
   String selectedReport = playerLabel;
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: AppColors.beigeLight,
-      child: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(16),
-            child: ToggleButtons(
-              isSelected: [
-                selectedReport == playerLabel,
-                selectedReport == heroLabel,
-              ],
-              onPressed: (index) {
-                setState(() {
-                  if (index == 0) {
-                    selectedReport = playerLabel;
-                  } else {
-                    selectedReport = heroLabel;
-                  }
-                });
-              },
-              borderRadius: BorderRadius.circular(12),
-              selectedColor: AppColors.beigeLight,
-              fillColor: AppColors.primaryLight,
-              color: AppColors.primary,
-              borderColor: AppColors.beigeDark,
-              selectedBorderColor: AppColors.beigeDark,
-              children: [
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 16),
-                  child: Text(playerLabel),
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 16),
-                  child: Text(heroLabel),
-                ),
-              ],
-            ),
+    return Stack(
+      children: [
+        // Imagem de fundo
+        Positioned.fill(
+          child: Image.asset(
+            'lib/assets/high_sea_bg.webp',
+            fit: BoxFit.cover,
           ),
-          const SizedBox(height: 16),
-          Expanded(
-            child: () {
-              switch (selectedReport) {
-                case playerLabel:
-                  return OriginDevice.isMobileWeb()
-                      ? RankingTableMobile(values: widget.playerData)
-                      : RankingTable(values: widget.playerData);
-                case heroLabel:
-                  return LayoutBuilder(
-                    builder: (context, constraints) {
-                      final height = constraints.maxHeight;
-                      final width = height;
+        ),
+        // Conteúdo principal
+        Container(
+          color: Colors.transparent,
+          // color: AppColors.beigeLight
+          //     .withValues(alpha: 0.8), // Transparência para destacar o conteúdo
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(16),
+                child: ToggleButtons(
+                  isSelected: [
+                    selectedReport == playerLabel,
+                    selectedReport == heroLabel,
+                  ],
+                  onPressed: (index) {
+                    setState(() {
+                      if (index == 0) {
+                        selectedReport = playerLabel;
+                      } else {
+                        selectedReport = heroLabel;
+                      }
+                    });
+                  },
+                  borderRadius: BorderRadius.circular(12),
+                  selectedColor: AppColors.beigeLight,
+                  fillColor: AppColors.primaryLight,
+                  color: AppColors.primary,
+                  borderColor: AppColors.beigeDark,
+                  selectedBorderColor: AppColors.beigeDark,
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 16),
+                      child: Text(playerLabel),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 16),
+                      child: Text(heroLabel),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 16),
+              Expanded(
+                child: () {
+                  switch (selectedReport) {
+                    case playerLabel:
+                      return OriginDevice.isMobileWeb()
+                          ? RankingTableMobile(values: widget.playerData)
+                          : RankingTable(values: widget.playerData);
+                    case heroLabel:
+                      return LayoutBuilder(
+                        builder: (context, constraints) {
+                          final height = constraints.maxHeight;
+                          final width = height;
 
-                      return Center(
-                        child: SizedBox(
-                          width: width,
-                          height: height,
-                          child: WinsDonutChart(values: widget.winsData),
-                        ),
+                          return Center(
+                            child: SizedBox(
+                              width: width,
+                              height: height,
+                              child: WinsDonutChart(values: widget.winsData),
+                            ),
+                          );
+                        },
                       );
-                    },
-                  );
-                default:
-                  return const SizedBox();
-              }
-            }(),
+                    default:
+                      return const SizedBox();
+                  }
+                }(),
+              ),
+            ],
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }
