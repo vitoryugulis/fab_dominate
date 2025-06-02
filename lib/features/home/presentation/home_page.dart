@@ -113,55 +113,67 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.beigeLight,
       appBar: AppBar(
-          backgroundColor: const Color(0xFF393E46),
-          title: Text(
-            'Liga Commoner 13 Dominate',
-            style: const TextStyle(color: AppColors.beigeLight),
+        backgroundColor: const Color(0xFF393E46),
+        title: Text(
+          'Liga Commoner 13 Dominate',
+          style: const TextStyle(color: AppColors.beigeLight),
+        ),
+        leading: Visibility(
+          visible: paragraphs.isNotEmpty,
+          child: IconButton(
+            icon: const Icon(Icons.rule, color: AppColors.beigeLight),
+            onPressed: () async {
+              await navigateToRulesPage();
+            },
           ),
-          leading: Visibility(
-            visible: paragraphs.isNotEmpty,
-            child: IconButton(
-              icon: const Icon(Icons.rule, color: AppColors.beigeLight),
-              onPressed: () async {
-                await navigateToRulesPage();
-              },
+        ),
+      ),
+      body: Stack(
+        children: [
+          // Imagem de fundo
+          Positioned.fill(
+            child: Image.asset(
+              'lib/assets/high_sea_bg.webp',
+              fit: BoxFit.cover,
             ),
-          )),
-      body: !hasError
-          ? Column(
-              children: [
-                SheetSelectorMenu(
-                  sheets: availableSheets,
-                  selectedSheet: selectedSheet,
-                  onSheetSelected: (sheet) {
-                    setState(() {
-                      selectedSheet = sheet;
-                    });
-                    loadData();
-                  },
+          ),
+          // Conteúdo principal
+          !hasError
+              ? Column(
+                  children: [
+                    SheetSelectorMenu(
+                      sheets: availableSheets,
+                      selectedSheet: selectedSheet,
+                      onSheetSelected: (sheet) {
+                        setState(() {
+                          selectedSheet = sheet;
+                        });
+                        loadData();
+                      },
+                    ),
+                    Expanded(
+                      child: heroData.isEmpty
+                          ? const Center(
+                              child: CircularProgressIndicator(
+                                color: AppColors.primary,
+                              ),
+                            )
+                          : ReportSelectorMenu(
+                              playerData: playerData,
+                              winsData: heroData,
+                            ),
+                    ),
+                  ],
+                )
+              : const Center(
+                  child: Text(
+                    'Erro ao carregar dados. Recarregue a tela ou peça ajuda ao administrador',
+                    style: TextStyle(color: AppColors.primary),
+                  ),
                 ),
-                Expanded(
-                  child: heroData.isEmpty
-                      ? const Center(
-                          child: CircularProgressIndicator(
-                            color: AppColors.primary,
-                          ),
-                        )
-                      : ReportSelectorMenu(
-                          playerData: playerData,
-                          winsData: heroData,
-                        ),
-                ),
-              ],
-            )
-          : const Center(
-              child: Text(
-                'Erro ao carregar dados. Recarregue a tela ou peça ajuda ao administrador',
-                style: TextStyle(color: AppColors.primary),
-              ),
-            ),
+        ],
+      ),
     );
   }
 }

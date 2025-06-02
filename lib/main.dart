@@ -1,5 +1,5 @@
 import 'package:dev/core/constants/constants.dart';
-import 'package:dev/features/home/presentation/home.dart';
+import 'package:dev/features/home/presentation/home_page.dart';
 import 'package:dev/features/rules/datasources/firebase/firebase_datasource.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
