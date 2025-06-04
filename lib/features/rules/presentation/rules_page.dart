@@ -59,128 +59,154 @@ class _RulesPageState extends State<RulesPage> {
 
   @override
   Widget build(BuildContext context) {
+    final FocusNode focusNode = FocusNode();
     return Scaffold(
-      backgroundColor: AppColors.beigeLight,
-      appBar: AppBar(
-        backgroundColor: const Color(0xFF393E46),
-        title: const Text(
-          'Regras da Liga Commoner',
-          style: TextStyle(color: AppColors.beigeLight),
-        ),
-        leading: IconButton(
-          icon: const Icon(
-            Icons.arrow_back,
-            color: AppColors.beigeLight,
+        backgroundColor: AppColors.beigeLight,
+        appBar: AppBar(
+          backgroundColor: Colors.black,
+          title: const Text(
+            'Regras da Liga Commoner',
+            style: TextStyle(color: AppColors.beigeLight),
           ),
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
+          leading: IconButton(
+            icon: const Icon(
+              Icons.arrow_back,
+              color: AppColors.beigeLight,
+            ),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          ),
         ),
-      ),
-      body: LayoutBuilder(
-        builder: (context, constraints) {
-          final isWeb = constraints.maxWidth > 800;
-          final horizontalPadding = isWeb ? 140.0 : 32.0;
+        body: GestureDetector(
+          onTap: () {
+            // Remove o foco de qualquer elemento ativo
+            focusNode.unfocus();
+          },
+          child: Stack(
+            children: [
+              Positioned.fill(
+                child: Image.asset(
+                  'lib/assets/paper.jpeg',
+                  fit: BoxFit.cover,
+                ),
+              ),
+              LayoutBuilder(
+                builder: (context, constraints) {
+                  final isWeb = constraints.maxWidth > 800;
+                  final horizontalPadding = isWeb ? 140.0 : 32.0;
 
-          return FutureBuilder<List<String>>(
-            future: _rulesFuture,
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return const Center(
-                  child: CircularProgressIndicator(color: AppColors.primary),
-                );
-              } else if (snapshot.hasError) {
-                return Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Text(
-                        'Erro ao carregar as regras. Tente novamente.',
-                        style:
-                            TextStyle(color: AppColors.primary, fontSize: 16),
-                        textAlign: TextAlign.center,
-                      ),
-                      const SizedBox(height: 16),
-                      ElevatedButton(
-                        onPressed: () {
-                          setState(() {
-                            _rulesFuture = _loadRules();
-                          });
-                        },
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: AppColors.primary,
-                        ),
-                        child: const Text('Tentar novamente'),
-                      ),
-                    ],
-                  ),
-                );
-              }
-
-              final parsedParagraphs = _parseParagraphs(snapshot.data ?? []);
-
-              return SingleChildScrollView(
-                padding: EdgeInsets.symmetric(
-                    horizontal: horizontalPadding, vertical: 16),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    if (parsedParagraphs.isNotEmpty)
-                      Padding(
-                        padding: const EdgeInsets.only(bottom: 16),
-                        child: SelectableText(
-                          parsedParagraphs.first,
-                          style: const TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
+                  return FutureBuilder<List<String>>(
+                    future: _rulesFuture,
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const Center(
+                          child: CircularProgressIndicator(
+                              color: AppColors.primary),
+                        );
+                      } else if (snapshot.hasError) {
+                        return Center(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              const Text(
+                                'Erro ao carregar as regras. Tente novamente.',
+                                style: TextStyle(
+                                    color: AppColors.primary, fontSize: 16),
+                                textAlign: TextAlign.center,
+                              ),
+                              const SizedBox(height: 16),
+                              ElevatedButton(
+                                onPressed: () {
+                                  setState(() {
+                                    _rulesFuture = _loadRules();
+                                  });
+                                },
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: AppColors.primary,
+                                ),
+                                child: const Text('Tentar novamente'),
+                              ),
+                            ],
                           ),
-                        ),
-                      ),
-                    for (var paragraph in parsedParagraphs.skip(1))
-                      paragraph.contains('<image>')
-                          ? Center(
-                              child: GestureDetector(
-                                onTap: () => _openImageInNewTab(
-                                    paragraph.replaceAll('<image>', '').trim()),
-                                child: Image.network(
-                                  paragraph.replaceAll('<image>', '').trim(),
-                                  errorBuilder: (context, error, stackTrace) {
-                                    return const Text(
-                                      'Imagem não disponível',
-                                      style: TextStyle(
-                                        fontSize: 16,
-                                        color: AppColors.primary,
-                                      ),
-                                    );
-                                  },
+                        );
+                      }
+
+                      final parsedParagraphs =
+                          _parseParagraphs(snapshot.data ?? []);
+
+                      return SingleChildScrollView(
+                        padding: EdgeInsets.symmetric(
+                            horizontal: horizontalPadding, vertical: 16),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            if (parsedParagraphs.isNotEmpty)
+                              Padding(
+                                padding: const EdgeInsets.only(bottom: 16),
+                                child: SelectableText(
+                                  parsedParagraphs.first,
+                                  style: const TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
+                                  ),
                                 ),
                               ),
-                            )
-                          : Padding(
-                              padding: const EdgeInsets.only(bottom: 16),
-                              child: Row(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  const Text(
-                                    '• ',
-                                    style: TextStyle(fontSize: 16),
-                                  ),
-                                  Expanded(
-                                    child: SelectableText(
-                                      paragraph,
-                                      style: const TextStyle(fontSize: 16),
+                            for (var paragraph in parsedParagraphs.skip(1))
+                              paragraph.contains('<image>')
+                                  ? Center(
+                                      child: GestureDetector(
+                                        onTap: () => _openImageInNewTab(
+                                            paragraph
+                                                .replaceAll('<image>', '')
+                                                .trim()),
+                                        child: Image.network(
+                                          paragraph
+                                              .replaceAll('<image>', '')
+                                              .trim(),
+                                          errorBuilder:
+                                              (context, error, stackTrace) {
+                                            return const Text(
+                                              'Imagem não disponível',
+                                              style: TextStyle(
+                                                fontSize: 16,
+                                                color: AppColors.primary,
+                                              ),
+                                            );
+                                          },
+                                        ),
+                                      ),
+                                    )
+                                  : Padding(
+                                      padding:
+                                          const EdgeInsets.only(bottom: 16),
+                                      child: Row(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          const Text(
+                                            '• ',
+                                            style: TextStyle(fontSize: 16),
+                                          ),
+                                          Expanded(
+                                            child: SelectableText(
+                                              paragraph,
+                                              style:
+                                                  const TextStyle(fontSize: 16),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
                                     ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                  ],
-                ),
-              );
-            },
-          );
-        },
-      ),
-    );
+                          ],
+                        ),
+                      );
+                    },
+                  );
+                },
+              ),
+            ],
+          ),
+        ));
   }
 }

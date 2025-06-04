@@ -27,7 +27,7 @@ class RankingTableMobile extends StatelessWidget {
         final rounds = row.length > 3 ? row[3] : '0';
         final winRate = row.length > 4 ? row[4] : '0%';
 
-        final double dataFontSize = 18;
+        final double dataFontSize = 14;
         final rowColor =
             index % 2 == 0 ? AppColors.lightRowColor : AppColors.darkRowColor;
 
@@ -63,7 +63,7 @@ class RankingTableMobile extends StatelessWidget {
                         name,
                         style: const TextStyle(
                           fontWeight: FontWeight.bold,
-                          fontSize: 22,
+                          fontSize: 18,
                           color: AppColors.text,
                         ),
                       ),

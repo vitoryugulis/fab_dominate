@@ -125,7 +125,7 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: const Color(0xFF393E46),
+        backgroundColor: Colors.black,
         title: Text(
           'Liga Commoner PROTOTYPE',
           style: const TextStyle(color: AppColors.beigeLight),
