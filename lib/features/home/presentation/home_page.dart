@@ -123,6 +123,10 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
+    final mediaWidth = MediaQuery.of(context).size.width;
+    final isMobile = mediaWidth < 1000;
+    double horizontalPadding = isMobile ? 5 : mediaWidth * 0.07;
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.black,
@@ -135,50 +139,92 @@ class _HomeState extends State<Home> {
           onPressed: navigateToRulesPage,
         ),
       ),
-      body: Stack(
-        children: [
-          // Imagem de fundo
-          Positioned.fill(
-            child: Image.asset(
-              'lib/assets/paper.jpeg',
-              fit: BoxFit.cover,
+      body: Container(
+        color: AppColors.beigeLight,
+        child: Stack(
+          children: [
+            // Imagem de fundo
+            Positioned.fill(
+              child: Image.asset(
+                'lib/assets/paper.jpeg',
+                fit: BoxFit.cover,
+              ),
             ),
-          ),
-          // Conteúdo principal
-          !hasError
-              ? Column(
-                  children: [
-                    SheetSelectorMenu(
-                      sheets: availableSheets,
-                      selectedSheet: selectedSheet,
-                      onSheetSelected: (sheet) {
-                        setState(() {
-                          selectedSheet = sheet;
-                        });
-                        loadData();
-                      },
-                    ),
-                    Expanded(
-                      child: heroData.isEmpty
-                          ? const Center(
-                              child: CircularProgressIndicator(
-                                color: AppColors.primary,
+            // Conteúdo principal
+            !hasError
+                ? Column(
+                    children: [
+                      SheetSelectorMenu(
+                        sheets: availableSheets,
+                        selectedSheet: selectedSheet,
+                        onSheetSelected: (sheet) {
+                          setState(() {
+                            selectedSheet = sheet;
+                          });
+                          loadData();
+                        },
+                      ),
+                      Expanded(
+                        child: heroData.isEmpty
+                            ? const Center(
+                                child: CircularProgressIndicator(
+                                  color: AppColors.primary,
+                                ),
+                              )
+                            : ReportSelectorMenu(
+                                playerData: playerData,
+                                winsData: heroData,
                               ),
-                            )
-                          : ReportSelectorMenu(
-                              playerData: playerData,
-                              winsData: heroData,
-                            ),
+                      ),
+                    ],
+                  )
+                : const Center(
+                    child: Text(
+                      'Erro ao carregar dados. Recarregue a tela ou peça ajuda ao administrador',
+                      style: TextStyle(color: AppColors.primary),
                     ),
-                  ],
-                )
-              : const Center(
-                  child: Text(
-                    'Erro ao carregar dados. Recarregue a tela ou peça ajuda ao administrador',
-                    style: TextStyle(color: AppColors.primary),
+                  ),
+
+            if (!isMobile)
+              IgnorePointer(
+                ignoring: true,
+                child: Positioned.fill(
+                  child: Container(
+                    margin: EdgeInsets.symmetric(horizontal: horizontalPadding),
+                    decoration: BoxDecoration(
+                      color: Colors.transparent,
+                      border: Border.symmetric(
+                        vertical: BorderSide(
+                          color: AppColors.beigeDarker,
+                          width: 2,
+                        ),
+                      ),
+                    ),
                   ),
                 ),
-        ],
+              ),
+
+            if (!isMobile)
+              IgnorePointer(
+                ignoring: true,
+                child: Positioned.fill(
+                  child: Container(
+                    margin:
+                        EdgeInsets.symmetric(horizontal: horizontalPadding - 5),
+                    decoration: BoxDecoration(
+                      color: Colors.transparent,
+                      border: Border.symmetric(
+                        vertical: BorderSide(
+                          color: AppColors.beigeDarker,
+                          width: 2,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              )
+          ],
+        ),
       ),
     );
   }
