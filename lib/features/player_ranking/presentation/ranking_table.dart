@@ -19,10 +19,11 @@ class RankingTable extends StatelessWidget {
 
     return Center(
       child: Padding(
-        padding: const EdgeInsets.all(24.0),
+        padding: const EdgeInsets.only(right: 24.0, left: 24.0, bottom: 24.0),
         child: Row(
           mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.start,
           children: [
             PlayersRankingTable(values: values),
           ],

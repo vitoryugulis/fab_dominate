@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:math';
 import 'dart:ui' as ui;
+import 'package:dev/core/constants/app_colors.dart';
 import 'package:dev/core/constants/constants.dart';
 import 'package:dev/core/constants/heroes/adult_hero_assets.dart';
 import 'package:dev/core/constants/heroes/young_hero_image_mapper.dart';
@@ -164,7 +165,10 @@ class _PlayersDonutChartState extends State<WinsDonutChart>
     final totalWins = winsData.values.fold(0.0, (a, b) => a + b);
 
     if (winsData.isEmpty || centerImage == null) {
-      return const Center(child: CircularProgressIndicator());
+      return const Center(
+          child: CircularProgressIndicator(
+        color: AppColors.primaryLight,
+      ));
     }
 
     final double minSize = OriginDevice.isMobileWeb() ? 100 : 370;

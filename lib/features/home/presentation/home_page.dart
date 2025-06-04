@@ -128,10 +128,10 @@ class _HomeState extends State<Home> {
         backgroundColor: Colors.black,
         title: Text(
           'Liga Commoner PROTOTYPE',
-          style: const TextStyle(color: AppColors.beigeLight),
+          style: const TextStyle(color: AppColors.beigeDarker),
         ),
         leading: IconButton(
-          icon: const Icon(Icons.rule, color: AppColors.beigeLight),
+          icon: const Icon(Icons.rule, color: AppColors.beigeDarker),
           onPressed: navigateToRulesPage,
         ),
       ),

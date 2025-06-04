@@ -61,12 +61,12 @@ class _RulesPageState extends State<RulesPage> {
   Widget build(BuildContext context) {
     final FocusNode focusNode = FocusNode();
     return Scaffold(
-        backgroundColor: AppColors.beigeLight,
+        backgroundColor: AppColors.beigeDarker,
         appBar: AppBar(
           backgroundColor: Colors.black,
           title: const Text(
             'Regras da Liga Commoner',
-            style: TextStyle(color: AppColors.beigeLight),
+            style: TextStyle(color: AppColors.beigeDarker),
           ),
           leading: IconButton(
             icon: const Icon(
@@ -102,7 +102,8 @@ class _RulesPageState extends State<RulesPage> {
                       if (snapshot.connectionState == ConnectionState.waiting) {
                         return const Center(
                           child: CircularProgressIndicator(
-                              color: AppColors.primary),
+                            color: AppColors.primary,
+                          ),
                         );
                       } else if (snapshot.hasError) {
                         return Center(
