@@ -1,13 +1,13 @@
+import 'package:dev/features/rules/datasources/google_auth/google_auth_manager.dart';
 import 'package:dio/dio.dart';
-import 'package:googleapis_auth/auth_io.dart';
+import 'package:flutter/material.dart';
 
 class RulesDatasource {
   final Dio dio;
-  final String credentialsJson; // Receber as credenciais como String
-
+  final GoogleAuthManager authManager;
   RulesDatasource({
     required this.dio,
-    required this.credentialsJson,
+    required this.authManager,
   });
 
   Future<Map<String, dynamic>> fetch() async {
@@ -15,15 +15,8 @@ class RulesDatasource {
     final url = 'https://docs.googleapis.com/v1/documents/$documentId';
 
     try {
-      // Carregar credenciais do JSON fornecido
-      final credentials = ServiceAccountCredentials.fromJson(credentialsJson);
-
-      // Obter cliente autenticado
-      final client = await clientViaServiceAccount(
-        credentials,
-        ['https://www.googleapis.com/auth/documents.readonly'],
-      );
-
+      final client = await authManager.getClient();
+      final stopwatchRequest = Stopwatch()..start();
       // Fazer a requisição com o token de acesso
       final response = await dio.get(
         url,
@@ -33,6 +26,9 @@ class RulesDatasource {
           },
         ),
       );
+      stopwatchRequest.stop();
+      debugPrint(
+          'Tempo para fazer a requisição: ${stopwatchRequest.elapsedMilliseconds} ms');
 
       if (response.statusCode == 200) {
         return response.data;
