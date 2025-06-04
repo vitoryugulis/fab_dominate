@@ -72,7 +72,17 @@ class RulesPage extends StatelessWidget {
               paragraph.contains('<image>')
                   ? Center(
                       child: Image.network(
-                          paragraph.replaceAll('<image>', '').trim()),
+                        paragraph.replaceAll('<image>', '').trim(),
+                        errorBuilder: (context, error, stackTrace) {
+                          return const Text(
+                            'Imagem não disponível',
+                            style: TextStyle(
+                              fontSize: 16,
+                              color: AppColors.primary,
+                            ),
+                          );
+                        },
+                      ),
                     )
                   : Padding(
                       padding: const EdgeInsets.only(bottom: 16),
