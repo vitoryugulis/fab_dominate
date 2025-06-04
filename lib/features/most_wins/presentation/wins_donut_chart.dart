@@ -24,8 +24,10 @@ class _PlayersDonutChartState extends State<WinsDonutChart>
   Map<String, double> winsData = {};
 
   String? selectedHero;
+
   late AnimationController _controller;
-  late Animation<double> _expansionAnimation;
+  late CurvedAnimation _expandCurve;
+  late CurvedAnimation _shrinkCurve;
 
   @override
   void initState() {
@@ -34,11 +36,17 @@ class _PlayersDonutChartState extends State<WinsDonutChart>
 
     _controller = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 300),
+      duration: const Duration(milliseconds: 400),
     );
 
-    _expansionAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
-      CurvedAnimation(parent: _controller, curve: Curves.easeOut),
+    _expandCurve = CurvedAnimation(
+      parent: _controller,
+      curve: Curves.easeOutBack,
+    );
+
+    _shrinkCurve = CurvedAnimation(
+      parent: _controller,
+      curve: Curves.easeIn,
     );
   }
 
@@ -180,8 +188,13 @@ class _PlayersDonutChartState extends State<WinsDonutChart>
             child: Stack(
               children: [
                 AnimatedBuilder(
-                  animation: _expansionAnimation,
+                  animation: _controller,
                   builder: (context, _) {
+                    final isExpanding = selectedHero != null &&
+                        _controller.status != AnimationStatus.reverse;
+                    final currentValue =
+                        isExpanding ? _expandCurve.value : _shrinkCurve.value;
+
                     return CustomPaint(
                       size: Size.infinite,
                       painter: DonutChartPainter(
@@ -189,7 +202,7 @@ class _PlayersDonutChartState extends State<WinsDonutChart>
                         totalWins: totalWins,
                         heroImages: heroImages,
                         selectedHero: selectedHero,
-                        expansion: _expansionAnimation.value,
+                        expansion: currentValue,
                       ),
                     );
                   },
@@ -258,7 +271,7 @@ class DonutChartPainter extends CustomPainter {
     double startAngle = -pi / 2;
 
     final shadowPaint = Paint()
-      ..color = Colors.black.withOpacity(0.3)
+      ..color = Colors.black.withValues(alpha: 0.3)
       ..style = PaintingStyle.stroke
       ..strokeWidth = outerRadiusBase * 0.08
       ..maskFilter = MaskFilter.blur(BlurStyle.normal, 10);
