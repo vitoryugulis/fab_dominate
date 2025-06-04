@@ -4,6 +4,7 @@ import 'package:dev/features/home/data/datasources/player_hero/player_hero_datas
 import 'package:dev/features/home/presentation/widgets/prototype_warning_dialog.dart';
 import 'package:dev/features/home/presentation/widgets/report_selector.dart';
 import 'package:dev/features/home/presentation/widgets/sheet_selector.dart';
+import 'package:dev/features/rules/datasources/google_auth/google_auth_manager.dart';
 import 'package:dev/features/rules/datasources/rules/rules_datasource.dart';
 import 'package:dev/features/rules/domain/entities/document.dart';
 import 'package:dev/features/rules/presentation/rules_page.dart';
@@ -48,7 +49,7 @@ class _HomeState extends State<Home> {
 
     rulesDatasource = RulesDatasource(
       dio: Dio(),
-      credentialsJson: Credentials.firebase.docsJson,
+      authManager: GoogleAuthManager(Credentials.firebase.docsJson),
     );
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -71,17 +72,29 @@ class _HomeState extends State<Home> {
     });
 
     try {
+      final stopwatchPlayerSheet = Stopwatch()..start();
       final playerSheet = await playerHeroDataSource.fetch(
         sheetName: selectedSheet,
         range: sheetRangePlayers,
       );
+      stopwatchPlayerSheet.stop();
+      debugPrint(
+          'Tempo para carregar playerSheet: ${stopwatchPlayerSheet.elapsedMilliseconds} ms');
 
+      final stopwatchHeroSheet = Stopwatch()..start();
       final heroSheet = await playerHeroDataSource.fetch(
         sheetName: selectedSheet,
         range: sheetRangeHeroes,
       );
+      stopwatchHeroSheet.stop();
+      debugPrint(
+          'Tempo para carregar heroSheet: ${stopwatchHeroSheet.elapsedMilliseconds} ms');
 
+      final stopwatchDocument = Stopwatch()..start();
       final document = await rulesDatasource.fetch();
+      stopwatchDocument.stop();
+      debugPrint(
+          'Tempo para carregar document: ${stopwatchDocument.elapsedMilliseconds} ms');
 
       setState(() {
         playerData = playerSheet;
@@ -102,8 +115,7 @@ class _HomeState extends State<Home> {
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) =>
-              RulesPage(rawTexts: paragraphs),
+          builder: (context) => RulesPage(rawTexts: paragraphs),
         ),
       );
     } catch (e) {
