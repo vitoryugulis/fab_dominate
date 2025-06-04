@@ -27,6 +27,7 @@ class RankingTableMobile extends StatelessWidget {
         final rounds = row.length > 3 ? row[3] : '0';
         final winRate = row.length > 4 ? row[4] : '0%';
 
+        final double dataFontSize = 18;
         final rowColor =
             index % 2 == 0 ? AppColors.lightRowColor : AppColors.darkRowColor;
 
@@ -41,21 +42,19 @@ class RankingTableMobile extends StatelessWidget {
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Avatar ou ícone do jogador
                 CircleAvatar(
-                  radius: 30,
+                  radius: 20,
                   backgroundColor: AppColors.primaryLight,
                   child: Text(
                     name.isNotEmpty ? (index + 1).toString() : '?',
                     style: const TextStyle(
-                      color: Colors.white,
+                      color: AppColors.beigeDark,
                       fontWeight: FontWeight.bold,
-                      fontSize: 24,
+                      fontSize: 16,
                     ),
                   ),
                 ),
-                const SizedBox(width: 16),
-                // Informações do jogador
+                const SizedBox(width: 14),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -64,44 +63,75 @@ class RankingTableMobile extends StatelessWidget {
                         name,
                         style: const TextStyle(
                           fontWeight: FontWeight.bold,
-                          fontSize: 18,
-                          color: AppColors.primary,
+                          fontSize: 22,
+                          color: AppColors.text,
                         ),
                       ),
                       const SizedBox(height: 8),
-                      Row(
+                      Wrap(
+                        spacing: 16,
+                        runSpacing: 8,
                         children: [
-                          const Icon(Icons.emoji_events,
-                              color: AppColors.primaryLight),
-                          const SizedBox(width: 8),
-                          Text('Pontos: $wins'),
-                        ],
-                      ),
-                      const Divider(),
-                      Row(
-                        children: [
-                          const Icon(Icons.event,
-                              color: AppColors.primaryLight),
-                          const SizedBox(width: 8),
-                          Text('Win%: $events'),
-                        ],
-                      ),
-                      const Divider(),
-                      Row(
-                        children: [
-                          const Icon(Icons.timer,
-                              color: AppColors.primaryLight),
-                          const SizedBox(width: 8),
-                          Text('Vitórias: $rounds'),
-                        ],
-                      ),
-                      const Divider(),
-                      Row(
-                        children: [
-                          const Icon(Icons.percent,
-                              color: AppColors.primaryLight),
-                          const SizedBox(width: 8),
-                          Text('Rodadas: $winRate'),
+                          Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              const Icon(Icons.star,
+                                  color: AppColors.primaryLight),
+                              const SizedBox(width: 4),
+                              Text(
+                                'Pontos: $wins',
+                                style: TextStyle(
+                                  fontSize: dataFontSize,
+                                  color: AppColors.text,
+                                ),
+                              ),
+                            ],
+                          ),
+                          Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              const Icon(Icons.bar_chart,
+                                  color: AppColors.primaryLight),
+                              const SizedBox(width: 4),
+                              Text(
+                                'Win%: $events',
+                                style: TextStyle(
+                                  fontSize: dataFontSize,
+                                  color: AppColors.text,
+                                ),
+                              ),
+                            ],
+                          ),
+                          Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              const Icon(Icons.emoji_events,
+                                  color: AppColors.primaryLight),
+                              const SizedBox(width: 4),
+                              Text(
+                                'Vitórias: $rounds',
+                                style: TextStyle(
+                                  fontSize: dataFontSize,
+                                  color: AppColors.text,
+                                ),
+                              ),
+                            ],
+                          ),
+                          Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              const Icon(Icons.replay,
+                                  color: AppColors.primaryLight),
+                              const SizedBox(width: 4),
+                              Text(
+                                'Rodadas: $winRate',
+                                style: TextStyle(
+                                  fontSize: dataFontSize,
+                                  color: AppColors.text,
+                                ),
+                              ),
+                            ],
+                          ),
                         ],
                       ),
                     ],

@@ -1,6 +1,6 @@
 # Information about the project
 
-Fab 13 Dominate
+FAB Liga Commoner PROTOTYPE
 
 ## Requirements
 - Flutter SDK 3.27.1

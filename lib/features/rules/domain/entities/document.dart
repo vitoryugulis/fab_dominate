@@ -12,6 +12,13 @@ class DocumentParser {
           if (run.containsKey('textRun')) {
             paragraphs.add(run['textRun']['content']);
           }
+          if (run.containsKey('inlineObjectElement')) {
+            final inlineObjectId = run['inlineObjectElement']['inlineObjectId'];
+            final image = extractImage(document, inlineObjectId);
+            if (image?.isNotEmpty ?? false) {
+              paragraphs.add(image!);
+            }
+          }
         }
       }
     }
@@ -19,19 +26,16 @@ class DocumentParser {
     return paragraphs;
   }
 
-  static String? extractImage(Map<String, dynamic> document) {
-    final content = document['body']['content'] as List;
+  static String? extractImage(Map<String, dynamic> document, String key) {
+    try {
+      final inlineObject = document['inlineObjects'][key];
 
-    for (var element in content) {
-      if (element.containsKey('inlineObjectElement')) {
-        final objectId = element['inlineObjectElement']['inlineObjectId'];
-        final inlineObject = document['inlineObjects'][objectId];
-        final embeddedObject =
-        inlineObject['inlineObjectProperties']['embeddedObject'];
-        return embeddedObject['imageProperties']['contentUri'];
-      }
+      final embeddedObject =
+          inlineObject['inlineObjectProperties']['embeddedObject'];
+      final imageUri = embeddedObject['imageProperties']['contentUri'];
+      return '<image>$imageUri<image>';
+    } catch (e) {
+      return null;
     }
-
-    return null;
   }
 }

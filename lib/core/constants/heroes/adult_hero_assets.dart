@@ -5,7 +5,7 @@ class AdultHeroAssets {
   static const String arakni = 'lib/assets/heroes/arakniMario.png';
   static const String slippy = 'lib/assets/heroes/arakniSlippy.png';
   static const String other = 'lib/assets/heroes/sea_preview_cover.webp';
-  static const String fab = 'lib/assets/fab.jpg';
+  static const String fab = 'lib/assets/high_seas.png.jpg';
 
   // 2024
   static const String jarl = 'lib/assets/heroes/jarl.png';

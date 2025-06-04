@@ -1,5 +1,5 @@
 name: dev
-description: "Fab 13 Dominate"
+description: "FAB Liga Commoner"
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
@@ -74,7 +74,9 @@ flutter:
   assets:
 #    - dev.env
 #    - .env
+    - lib/assets/paper.jpeg
     - lib/assets/high_sea_bg.webp
+    - lib/assets/high_seas.png
     - lib/assets/fab.jpg
     - lib/assets/heroes/cindra.png
     - lib/assets/heroes/fang_story.webp

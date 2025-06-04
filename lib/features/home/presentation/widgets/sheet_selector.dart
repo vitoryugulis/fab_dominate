@@ -21,7 +21,7 @@ class SheetSelectorMenu extends StatelessWidget {
         // Imagem de fundo
         Positioned.fill(
           child: Image.asset(
-            'lib/assets/high_sea_bg.webp',
+            'lib/assets/paper.jpeg',
             fit: BoxFit.cover,
           ),
         ),

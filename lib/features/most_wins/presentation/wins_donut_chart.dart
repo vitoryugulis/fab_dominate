@@ -43,7 +43,7 @@ class _PlayersDonutChartState extends State<WinsDonutChart> {
   Future<void> _loadAllHeroImages() async {
     final futures = widget.values.map((row) async {
       final name = row.isNotEmpty ? row[HeroReportColumns.name] : 'Unknown';
-      final assetPath = YoungHeroImageMapper.getImageUrl(name) ?? '';
+      final assetPath = YoungHeroImageMapper.getAssetPath(name) ?? '';
 
       final image = await _loadAssetImage(assetPath);
       if (image != null) {
@@ -53,7 +53,7 @@ class _PlayersDonutChartState extends State<WinsDonutChart> {
 
     await Future.wait(futures);
 
-    final center = await _loadAssetImage('lib/assets/fab.jpg');
+    final center = await _loadAssetImage('lib/assets/high_seas.png');
     if (!mounted) return;
     setState(() {
       centerImage = center;
@@ -89,6 +89,10 @@ class _PlayersDonutChartState extends State<WinsDonutChart> {
         ? max(maxSize, min(MediaQuery.of(context).size.width * 0.25, minSize))
         : MediaQuery.of(context).size.width * 0.55;
 
+    final centralLogoTween = OriginDevice.isMobileWeb()
+        ? Tween<double>(begin: 1.08, end: 0.98)
+        : Tween<double>(begin: 1.2, end: 1.0);
+
     return AspectRatio(
       aspectRatio: 1,
       child: Stack(
@@ -102,26 +106,36 @@ class _PlayersDonutChartState extends State<WinsDonutChart> {
             ),
           ),
           Center(
-            child: Container(
-              width: centralLogoSize,
-              height: centralLogoSize,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: Colors.black,
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withValues(alpha: 0.6),
-                    blurRadius: 8,
-                    spreadRadius: 1,
-                  )
-                ],
-                image: DecorationImage(
-                  image: const AssetImage('lib/assets/fab.jpg'),
-                  fit: BoxFit.fitWidth,
-                ),
-              ),
+            child: TweenAnimationBuilder<double>(
+              tween: centralLogoTween, // Zoom out de 1.2 para 1.0
+              duration: const Duration(seconds: 2), // Duração da animação
+              curve: Curves.easeOut,
+              builder: (context, scale, child) {
+                return Transform.scale(
+                  scale: scale,
+                  child: Container(
+                    width: centralLogoSize,
+                    height: centralLogoSize,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Colors.transparent,
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withAlpha(150),
+                          blurRadius: 8,
+                          spreadRadius: 1,
+                        )
+                      ],
+                      image: DecorationImage(
+                        image: const AssetImage('lib/assets/high_seas.png'),
+                        fit: BoxFit.fitHeight,
+                      ),
+                    ),
+                  ),
+                );
+              },
             ),
-          )
+          ),
         ],
       ),
     );
@@ -190,20 +204,38 @@ class DonutChartPainter extends CustomPainter {
 
       final middleAngle = startAngle + sweepAngle / 2;
       final radius = (outerRadius + innerRadius) / 2;
-      final offsetY = !OriginDevice.isMobileWeb() ? 80.0 : 50;
-      final offsetX = !OriginDevice.isMobileWeb() ? -10.0 : -10;
-      final faceZoom = 10;
+      final faceZoom = 12;
 
-      final imageCenter = Offset(
-        center.dx + radius * cos(middleAngle) + offsetX,
-        center.dy + radius * sin(middleAngle) + offsetY,
-      );
+      // Obtém o focalPoint do herói, se existir, senão usa Offset.zero
+      final Offset focalPoint = YoungHeroImageMapper.getFocalPoint(name);
+
+      // Ajuste dinâmico baseado na posição da fatia
+      final double angleX = cos(middleAngle);
+      final double angleY = sin(middleAngle);
+
+      // Controle de intensidade do ajuste (para afastar mais ou menos do centro)
+      final double shiftIntensity = OriginDevice.isMobileWeb() ? 30 : 50;
+
       final sweepRatio = sweepAngle / (2 * pi);
       final zoomFactor = ui.lerpDouble(2, faceZoom, sweepRatio) ?? 2.0;
+
+      final dynamicShift =
+          shiftIntensity * sweepRatio; // sweepRatio = sweepAngle / (2*pi)
+
+      final offsetXDynamic = angleX * dynamicShift;
+      final offsetYDynamic = angleY * dynamicShift;
 
       final imageSize = Size(
         (outerRadius - innerRadius) * zoomFactor,
         (outerRadius - innerRadius) * zoomFactor,
+      );
+
+      // Centro da imagem ajustado com focal point + deslocamento dinâmico
+      final focalOffset = calculateFocalOffset(focalPoint, imageSize);
+
+      final imageCenter = Offset(
+        center.dx + radius * cos(middleAngle) + offsetXDynamic + focalOffset.dx,
+        center.dy + radius * sin(middleAngle) + offsetYDynamic + focalOffset.dy,
       );
 
       final imageRect = Rect.fromCenter(
@@ -219,7 +251,7 @@ class DonutChartPainter extends CustomPainter {
           canvas: canvas,
           rect: imageRect,
           image: image,
-          fit: BoxFit.cover,
+          fit: BoxFit.contain,
         );
       }
 
@@ -230,4 +262,11 @@ class DonutChartPainter extends CustomPainter {
 
   @override
   bool shouldRepaint(DonutChartPainter oldDelegate) => true;
+}
+
+Offset calculateFocalOffset(Offset focalPoint, Size imageSize) {
+  return Offset(
+    focalPoint.dx * imageSize.width / 2,
+    focalPoint.dy * imageSize.height / 2,
+  );
 }
