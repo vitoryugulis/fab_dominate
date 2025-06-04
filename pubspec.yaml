@@ -76,6 +76,7 @@ flutter:
 #    - .env
     - lib/assets/paper.jpeg
     - lib/assets/high_sea_bg.webp
+    - lib/assets/high_seas.png
     - lib/assets/fab.jpg
     - lib/assets/heroes/cindra.png
     - lib/assets/heroes/fang_story.webp

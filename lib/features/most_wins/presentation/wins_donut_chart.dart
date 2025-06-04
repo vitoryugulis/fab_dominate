@@ -53,7 +53,7 @@ class _PlayersDonutChartState extends State<WinsDonutChart> {
 
     await Future.wait(futures);
 
-    final center = await _loadAssetImage('lib/assets/fab.jpg');
+    final center = await _loadAssetImage('lib/assets/high_seas.png');
     if (!mounted) return;
     setState(() {
       centerImage = center;
@@ -89,6 +89,10 @@ class _PlayersDonutChartState extends State<WinsDonutChart> {
         ? max(maxSize, min(MediaQuery.of(context).size.width * 0.25, minSize))
         : MediaQuery.of(context).size.width * 0.55;
 
+    final centralLogoTween = OriginDevice.isMobileWeb()
+        ? Tween<double>(begin: 1.08, end: 0.98)
+        : Tween<double>(begin: 1.2, end: 1.0);
+
     return AspectRatio(
       aspectRatio: 1,
       child: Stack(
@@ -102,26 +106,36 @@ class _PlayersDonutChartState extends State<WinsDonutChart> {
             ),
           ),
           Center(
-            child: Container(
-              width: centralLogoSize,
-              height: centralLogoSize,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: Colors.black,
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withValues(alpha: 0.6),
-                    blurRadius: 8,
-                    spreadRadius: 1,
-                  )
-                ],
-                image: DecorationImage(
-                  image: const AssetImage('lib/assets/fab.jpg'),
-                  fit: BoxFit.fitWidth,
-                ),
-              ),
+            child: TweenAnimationBuilder<double>(
+              tween: centralLogoTween, // Zoom out de 1.2 para 1.0
+              duration: const Duration(seconds: 2), // Duração da animação
+              curve: Curves.easeOut,
+              builder: (context, scale, child) {
+                return Transform.scale(
+                  scale: scale,
+                  child: Container(
+                    width: centralLogoSize,
+                    height: centralLogoSize,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Colors.transparent,
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withAlpha(150),
+                          blurRadius: 8,
+                          spreadRadius: 1,
+                        )
+                      ],
+                      image: DecorationImage(
+                        image: const AssetImage('lib/assets/high_seas.png'),
+                        fit: BoxFit.fitHeight,
+                      ),
+                    ),
+                  ),
+                );
+              },
             ),
-          )
+          ),
         ],
       ),
     );
