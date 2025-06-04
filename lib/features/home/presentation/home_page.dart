@@ -116,7 +116,7 @@ class _HomeState extends State<Home> {
       appBar: AppBar(
         backgroundColor: const Color(0xFF393E46),
         title: Text(
-          'Liga Commoner 13 Dominate',
+          'Liga Commoner PROTOTYPE',
           style: const TextStyle(color: AppColors.beigeLight),
         ),
         leading: Visibility(
@@ -134,7 +134,7 @@ class _HomeState extends State<Home> {
           // Imagem de fundo
           Positioned.fill(
             child: Image.asset(
-              'lib/assets/high_sea_bg.webp',
+              'lib/assets/paper.jpeg',
               fit: BoxFit.cover,
             ),
           ),
