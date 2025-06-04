@@ -6,7 +6,6 @@ import 'package:dev/features/home/presentation/widgets/report_selector.dart';
 import 'package:dev/features/home/presentation/widgets/sheet_selector.dart';
 import 'package:dev/features/rules/datasources/google_auth/google_auth_manager.dart';
 import 'package:dev/features/rules/datasources/rules/rules_datasource.dart';
-import 'package:dev/features/rules/domain/entities/document.dart';
 import 'package:dev/features/rules/presentation/rules_page.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -21,6 +20,8 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   late final PlayerHeroDataSource playerHeroDataSource;
   late final RulesDatasource rulesDatasource;
+  late final Widget rulesPage;
+
   final documentId = '1fizAV99bY_Fl5SA4QvjAOQRZH9qbEDW58jsQ-1eDXGs';
 
   bool hasError = false;
@@ -37,7 +38,6 @@ class _HomeState extends State<Home> {
 
   List<List<String>> playerData = [];
   List<List<String>> heroData = [];
-  List<String> paragraphs = [];
   String? imageUrl;
   @override
   void initState() {
@@ -46,11 +46,12 @@ class _HomeState extends State<Home> {
       dio: Dio(),
       apiKey: Credentials.apiKey,
     );
-
     rulesDatasource = RulesDatasource(
       dio: Dio(),
       authManager: GoogleAuthManager(Credentials.firebase.docsJson),
     );
+
+    rulesPage = RulesPage(rulesDatasource: rulesDatasource);
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       showDialog(
@@ -67,41 +68,33 @@ class _HomeState extends State<Home> {
     setState(() {
       playerData = [];
       heroData = [];
-      paragraphs = [];
       imageUrl = null;
     });
 
+    final stopwatch = Stopwatch()..start();
+
     try {
-      final stopwatchPlayerSheet = Stopwatch()..start();
-      final playerSheet = await playerHeroDataSource.fetch(
-        sheetName: selectedSheet,
-        range: sheetRangePlayers,
-      );
-      stopwatchPlayerSheet.stop();
-      debugPrint(
-          'Tempo para carregar playerSheet: ${stopwatchPlayerSheet.elapsedMilliseconds} ms');
+      final results = await Future.wait([
+        playerHeroDataSource.fetch(
+          sheetName: selectedSheet,
+          range: sheetRangePlayers,
+        ),
+        playerHeroDataSource.fetch(
+          sheetName: selectedSheet,
+          range: sheetRangeHeroes,
+        ),
+      ]);
 
-      final stopwatchHeroSheet = Stopwatch()..start();
-      final heroSheet = await playerHeroDataSource.fetch(
-        sheetName: selectedSheet,
-        range: sheetRangeHeroes,
-      );
-      stopwatchHeroSheet.stop();
+      stopwatch.stop();
       debugPrint(
-          'Tempo para carregar heroSheet: ${stopwatchHeroSheet.elapsedMilliseconds} ms');
-
-      final stopwatchDocument = Stopwatch()..start();
-      final document = await rulesDatasource.fetch();
-      stopwatchDocument.stop();
-      debugPrint(
-          'Tempo para carregar document: ${stopwatchDocument.elapsedMilliseconds} ms');
+          'Tempo total para carregar playerSheet e heroSheet: ${stopwatch.elapsedMilliseconds} ms');
 
       setState(() {
-        playerData = playerSheet;
-        heroData = heroSheet;
-        paragraphs = DocumentParser.extractParagraphs(document);
+        playerData = results.first;
+        heroData = results.last;
       });
     } catch (e) {
+      stopwatch.stop();
       setState(() {
         hasError = true;
       });
@@ -109,13 +102,13 @@ class _HomeState extends State<Home> {
     }
   }
 
-  Future<void> navigateToRulesPage() async {
+  navigateToRulesPage() {
     try {
       if (!mounted) return;
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => RulesPage(rawTexts: paragraphs),
+          builder: (context) => rulesPage,
         ),
       );
     } catch (e) {
@@ -137,14 +130,9 @@ class _HomeState extends State<Home> {
           'Liga Commoner PROTOTYPE',
           style: const TextStyle(color: AppColors.beigeLight),
         ),
-        leading: Visibility(
-          visible: paragraphs.isNotEmpty,
-          child: IconButton(
-            icon: const Icon(Icons.rule, color: AppColors.beigeLight),
-            onPressed: () async {
-              await navigateToRulesPage();
-            },
-          ),
+        leading: IconButton(
+          icon: const Icon(Icons.rule, color: AppColors.beigeLight),
+          onPressed: navigateToRulesPage,
         ),
       ),
       body: Stack(
