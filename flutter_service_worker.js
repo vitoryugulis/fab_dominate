@@ -102,8 +102,8 @@ const RESOURCES = {"icons/Icon-192.png": "ac9a721a12bbc803b44f645561ecb1e1",
 "index.html": "0c4ade4382db4ead99cbc249b1db152d",
 "/": "0c4ade4382db4ead99cbc249b1db152d",
 "version.json": "bfa42ec333cd9463da9a5161559cb568",
-"flutter_bootstrap.js": "2975d30fd9071bf42ca2eafda3d178ec",
-"main.dart.js": "96ae7137aae189071ad324939ed4ac3e",
+"flutter_bootstrap.js": "64118d43770a8a32fd18d79fb9277a42",
+"main.dart.js": "35a1e61457467fbb2b3f02ccae3a703d",
 "favicon.png": "5dcef449791fa27946b3d35ad8803796"};
 // The application shell files that are downloaded before a service worker can
 // start.
