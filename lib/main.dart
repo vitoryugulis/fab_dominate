@@ -7,7 +7,25 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 void main() async {
   await _configureCredentials();
 
-  runApp(const MaterialApp(home: Home()));
+  runApp(
+    MaterialApp(
+      theme: ThemeData(
+        fontFamily: 'Merriweather', // Define a fonte global
+        textTheme: const TextTheme(
+          bodyLarge: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+          bodyMedium: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+          bodySmall: TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
+          headlineLarge: TextStyle(fontSize: 32, fontWeight: FontWeight.w700),
+          headlineMedium: TextStyle(fontSize: 28, fontWeight: FontWeight.w700),
+          headlineSmall: TextStyle(
+              fontSize: 12,
+              fontWeight: FontWeight.w600,
+              fontStyle: FontStyle.italic),
+        ),
+      ),
+      home: Home(),
+    ),
+  );
 }
 
 Future<void> _configureCredentials() async {
