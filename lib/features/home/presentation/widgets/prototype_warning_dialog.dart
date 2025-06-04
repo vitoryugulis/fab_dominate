@@ -13,7 +13,7 @@ class PrototypeWarningDialog extends StatelessWidget {
       child: Container(
         constraints: const BoxConstraints(
           maxWidth: 400, // Largura máxima fixa
-          maxHeight: 200, // Altura máxima fixa
+          maxHeight: 300, // Altura máxima fixa
         ),
         decoration: BoxDecoration(
           color: AppColors.beigeDark, // Cor de fundo adicionada

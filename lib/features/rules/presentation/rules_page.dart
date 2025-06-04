@@ -61,90 +61,103 @@ class _RulesPageState extends State<RulesPage> {
   Widget build(BuildContext context) {
     final FocusNode focusNode = FocusNode();
     return Scaffold(
-        backgroundColor: AppColors.beigeDarker,
-        appBar: AppBar(
-          backgroundColor: Colors.black,
-          title: const Text(
-            'Regras da Liga Commoner',
-            style: TextStyle(color: AppColors.beigeDarker),
-          ),
-          leading: IconButton(
-            icon: const Icon(
-              Icons.arrow_back,
-              color: AppColors.beigeDarker,
-            ),
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-          ),
+      backgroundColor: AppColors.beigeDarker,
+      appBar: AppBar(
+        backgroundColor: Colors.black,
+        title: const Text(
+          'Regras da Liga Commoner',
+          style: TextStyle(color: AppColors.beigeDarker),
         ),
-        body: GestureDetector(
-          onTap: () {
-            // Remove o foco de qualquer elemento ativo
-            focusNode.unfocus();
+        leading: IconButton(
+          icon: const Icon(
+            Icons.arrow_back,
+            color: AppColors.beigeDarker,
+          ),
+          onPressed: () {
+            Navigator.of(context).pop();
           },
-          child: Stack(
-            children: [
-              Positioned.fill(
-                child: Image.asset(
-                  'lib/assets/paper.jpeg',
-                  fit: BoxFit.cover,
-                ),
+        ),
+      ),
+      body: GestureDetector(
+        onTap: () {
+          focusNode.unfocus();
+        },
+        child: Stack(
+          children: [
+            Positioned.fill(
+              child: Image.asset(
+                'lib/assets/paper.jpeg',
+                fit: BoxFit.cover,
               ),
-              LayoutBuilder(
-                builder: (context, constraints) {
-                  final isWeb = constraints.maxWidth > 800;
-                  final horizontalPadding = isWeb ? 160.0 : 32.0;
+            ),
+            LayoutBuilder(
+              builder: (context, constraints) {
+                final isWeb = constraints.maxWidth > 800;
+                final horizontalPadding = isWeb ? 200.0 : 32.0;
 
-                  return FutureBuilder<List<String>>(
-                    future: _rulesFuture,
-                    builder: (context, snapshot) {
-                      if (snapshot.connectionState == ConnectionState.waiting) {
-                        return const Center(
-                          child: CircularProgressIndicator(
-                            color: AppColors.primary,
-                          ),
-                        );
-                      } else if (snapshot.hasError) {
-                        return Center(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              const Text(
-                                'Erro ao carregar as regras. Tente novamente.',
-                                style: TextStyle(
-                                    color: AppColors.primary, fontSize: 16),
-                                textAlign: TextAlign.center,
+                return FutureBuilder<List<String>>(
+                  future: _rulesFuture,
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const Center(
+                        child: CircularProgressIndicator(
+                          color: AppColors.primary,
+                        ),
+                      );
+                    } else if (snapshot.hasError) {
+                      return Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const Text(
+                              'Erro ao carregar as regras. Tente novamente.',
+                              style: TextStyle(
+                                  color: AppColors.primary, fontSize: 16),
+                              textAlign: TextAlign.center,
+                            ),
+                            const SizedBox(height: 16),
+                            ElevatedButton(
+                              onPressed: () {
+                                setState(() {
+                                  _rulesFuture = _loadRules();
+                                });
+                              },
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: AppColors.primary,
                               ),
-                              const SizedBox(height: 16),
-                              ElevatedButton(
-                                onPressed: () {
-                                  setState(() {
-                                    _rulesFuture = _loadRules();
-                                  });
-                                },
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: AppColors.primary,
-                                ),
-                                child: const Text('Tentar novamente'),
-                              ),
-                            ],
-                          ),
-                        );
-                      }
+                              child: const Text('Tentar novamente'),
+                            ),
+                          ],
+                        ),
+                      );
+                    }
 
-                      final parsedParagraphs =
-                          _parseParagraphs(snapshot.data ?? []);
-
-                      return SingleChildScrollView(
+                    final parsedParagraphs =
+                        _parseParagraphs(snapshot.data ?? []);
+                    return SingleChildScrollView(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: horizontalPadding / 2,
+                      ),
+                      child: Container(
                         padding: EdgeInsets.symmetric(
-                            horizontal: horizontalPadding, vertical: 16),
+                            horizontal: horizontalPadding / 2),
+                        decoration: !isWeb
+                            ? null
+                            : BoxDecoration(
+                                border: Border.symmetric(
+                                  vertical: BorderSide(
+                                    color: AppColors.beigeDarker,
+                                    width: 2,
+                                  ),
+                                ),
+                              ),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             if (parsedParagraphs.isNotEmpty)
                               Padding(
-                                padding: const EdgeInsets.only(bottom: 16),
+                                padding:
+                                    const EdgeInsets.only(bottom: 16, top: 80),
                                 child: SelectableText(
                                   parsedParagraphs.first,
                                   style: const TextStyle(
@@ -201,13 +214,15 @@ class _RulesPageState extends State<RulesPage> {
                                     ),
                           ],
                         ),
-                      );
-                    },
-                  );
-                },
-              ),
-            ],
-          ),
-        ));
+                      ),
+                    );
+                  },
+                );
+              },
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }

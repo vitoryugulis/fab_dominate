@@ -19,8 +19,8 @@ class ReportSelectorMenu extends StatefulWidget {
   State<ReportSelectorMenu> createState() => _ReportSelectorMenuState();
 }
 
-const String heroLabel = 'Ranking de Heróis';
-const String playerLabel = 'Ranking de jogadores';
+const String heroLabel = 'Heróis';
+const String playerLabel = 'Jogadores';
 
 class _ReportSelectorMenuState extends State<ReportSelectorMenu> {
   String selectedReport = playerLabel;
