@@ -17,15 +17,35 @@ class WinsDonutChart extends StatefulWidget {
   State<WinsDonutChart> createState() => _PlayersDonutChartState();
 }
 
-class _PlayersDonutChartState extends State<WinsDonutChart> {
+class _PlayersDonutChartState extends State<WinsDonutChart>
+    with SingleTickerProviderStateMixin {
   final Map<String, ui.Image> heroImages = {};
   ui.Image? centerImage;
   Map<String, double> winsData = {};
+
+  String? selectedHero;
+  late AnimationController _controller;
+  late Animation<double> _expansionAnimation;
 
   @override
   void initState() {
     super.initState();
     _loadAllHeroImages();
+
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 300),
+    );
+
+    _expansionAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(parent: _controller, curve: Curves.easeOut),
+    );
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
   }
 
   Map<String, double> _generateWinsData(List<List<String>> data) {
@@ -74,6 +94,63 @@ class _PlayersDonutChartState extends State<WinsDonutChart> {
     }
   }
 
+  void _onTapDown(TapDownDetails details, Size size) {
+    final localPosition = details.localPosition;
+    final center = Offset(size.width / 2, size.height / 2);
+    final dx = localPosition.dx - center.dx;
+    final dy = localPosition.dy - center.dy;
+    final distanceFromCenter = sqrt(dx * dx + dy * dy);
+
+    final outerRadius = size.width / 2;
+    final innerRadius = outerRadius * 0.6;
+
+    if (distanceFromCenter < innerRadius || distanceFromCenter > outerRadius) {
+      setState(() {
+        selectedHero = null;
+      });
+      _controller.reverse();
+      return;
+    }
+
+    double angle = atan2(dy, dx) + pi / 2;
+    if (angle < 0) angle += 2 * pi;
+
+    double startAngle = 0;
+
+    for (final entry in winsData.entries) {
+      final sweepAngle =
+          (entry.value / winsData.values.fold(0.0, (a, b) => a + b)) * 2 * pi;
+
+      if (isAngleBetween(angle, startAngle, sweepAngle)) {
+        setState(() {
+          if (selectedHero == entry.key) {
+            selectedHero = null;
+            _controller.reverse();
+          } else {
+            selectedHero = entry.key;
+            _controller.forward();
+          }
+        });
+        return;
+      }
+      startAngle = (startAngle + sweepAngle) % (2 * pi);
+    }
+
+    setState(() {
+      selectedHero = null;
+    });
+    _controller.reverse();
+  }
+
+  bool isAngleBetween(double angle, double start, double sweep) {
+    final end = (start + sweep) % (2 * pi);
+    if (start <= end) {
+      return angle >= start && angle <= end;
+    } else {
+      return angle >= start || angle <= end;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final totalWins = winsData.values.fold(0.0, (a, b) => a + b);
@@ -93,51 +170,67 @@ class _PlayersDonutChartState extends State<WinsDonutChart> {
         ? Tween<double>(begin: 1.08, end: 0.98)
         : Tween<double>(begin: 1.2, end: 1.0);
 
-    return AspectRatio(
-      aspectRatio: 1,
-      child: Stack(
-        children: [
-          CustomPaint(
-            size: Size.infinite,
-            painter: DonutChartPainter(
-              data: winsData,
-              totalWins: totalWins,
-              heroImages: heroImages,
-            ),
-          ),
-          Center(
-            child: TweenAnimationBuilder<double>(
-              tween: centralLogoTween, // Zoom out de 1.2 para 1.0
-              duration: const Duration(seconds: 2), // Duração da animação
-              curve: Curves.easeOut,
-              builder: (context, scale, child) {
-                return Transform.scale(
-                  scale: scale,
-                  child: Container(
-                    width: centralLogoSize,
-                    height: centralLogoSize,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: Colors.transparent,
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withAlpha(150),
-                          blurRadius: 8,
-                          spreadRadius: 1,
-                        )
-                      ],
-                      image: DecorationImage(
-                        image: const AssetImage('lib/assets/high_seas.png'),
-                        fit: BoxFit.fitHeight,
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final size = constraints.biggest;
+        return GestureDetector(
+          onTapDown: (details) => _onTapDown(details, size),
+          child: AspectRatio(
+            aspectRatio: 1,
+            child: Stack(
+              children: [
+                AnimatedBuilder(
+                  animation: _expansionAnimation,
+                  builder: (context, _) {
+                    return CustomPaint(
+                      size: Size.infinite,
+                      painter: DonutChartPainter(
+                        data: winsData,
+                        totalWins: totalWins,
+                        heroImages: heroImages,
+                        selectedHero: selectedHero,
+                        expansion: _expansionAnimation.value,
                       ),
-                    ),
+                    );
+                  },
+                ),
+                Center(
+                  child: TweenAnimationBuilder<double>(
+                    tween: centralLogoTween,
+                    duration: const Duration(seconds: 2),
+                    curve: Curves.easeOut,
+                    builder: (context, scale, child) {
+                      return Transform.scale(
+                        scale: scale,
+                        child: Container(
+                          width: centralLogoSize,
+                          height: centralLogoSize,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: Colors.transparent,
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withAlpha(150),
+                                blurRadius: 8,
+                                spreadRadius: 1,
+                              )
+                            ],
+                            image: DecorationImage(
+                              image:
+                                  const AssetImage('lib/assets/high_seas.png'),
+                              fit: BoxFit.fitHeight,
+                            ),
+                          ),
+                        ),
+                      );
+                    },
                   ),
-                );
-              },
+                ),
+              ],
             ),
           ),
-        ],
-      ),
+        );
+      },
     );
   }
 }
@@ -146,35 +239,43 @@ class DonutChartPainter extends CustomPainter {
   final Map<String, double> data;
   final double totalWins;
   final Map<String, ui.Image> heroImages;
+  final String? selectedHero;
+  final double expansion; // Valor de 0.0 a 1.0
 
   DonutChartPainter({
     required this.data,
     required this.totalWins,
     required this.heroImages,
+    this.selectedHero,
+    this.expansion = 0.0,
   });
 
   @override
   void paint(Canvas canvas, Size size) {
     final center = Offset(size.width / 2, size.height / 2);
-    final outerRadius = size.width / 2;
-    final innerRadius = outerRadius * 0.6;
+    final outerRadiusBase = size.width / 2;
+    final innerRadius = outerRadiusBase * 0.6;
     double startAngle = -pi / 2;
 
     final shadowPaint = Paint()
-      ..color = Colors.black.withValues(alpha: 0.3)
+      ..color = Colors.black.withOpacity(0.3)
       ..style = PaintingStyle.stroke
-      ..strokeWidth = outerRadius * 0.08
+      ..strokeWidth = outerRadiusBase * 0.08
       ..maskFilter = MaskFilter.blur(BlurStyle.normal, 10);
 
     final shadowPath = Path()
-      ..addOval(Rect.fromCircle(center: center, radius: outerRadius))
+      ..addOval(Rect.fromCircle(center: center, radius: outerRadiusBase))
       ..addOval(Rect.fromCircle(center: center, radius: innerRadius))
       ..fillType = PathFillType.evenOdd;
 
     canvas.drawPath(shadowPath, shadowPaint);
 
     data.forEach((name, wins) {
+      final isSelected = name == selectedHero;
       final sweepAngle = (wins / totalWins) * 2 * pi;
+
+      final outerRadius =
+          isSelected ? outerRadiusBase + 20 * expansion : outerRadiusBase;
 
       final path = Path()
         ..moveTo(
@@ -206,21 +307,16 @@ class DonutChartPainter extends CustomPainter {
       final radius = (outerRadius + innerRadius) / 2;
       final faceZoom = 12;
 
-      // Obtém o focalPoint do herói, se existir, senão usa Offset.zero
       final Offset focalPoint = YoungHeroImageMapper.getFocalPoint(name);
 
-      // Ajuste dinâmico baseado na posição da fatia
       final double angleX = cos(middleAngle);
       final double angleY = sin(middleAngle);
-
-      // Controle de intensidade do ajuste (para afastar mais ou menos do centro)
       final double shiftIntensity = OriginDevice.isMobileWeb() ? 30 : 50;
 
       final sweepRatio = sweepAngle / (2 * pi);
       final zoomFactor = ui.lerpDouble(2, faceZoom, sweepRatio) ?? 2.0;
 
-      final dynamicShift =
-          shiftIntensity * sweepRatio; // sweepRatio = sweepAngle / (2*pi)
+      final dynamicShift = shiftIntensity * sweepRatio;
 
       final offsetXDynamic = angleX * dynamicShift;
       final offsetYDynamic = angleY * dynamicShift;
@@ -230,7 +326,6 @@ class DonutChartPainter extends CustomPainter {
         (outerRadius - innerRadius) * zoomFactor,
       );
 
-      // Centro da imagem ajustado com focal point + deslocamento dinâmico
       final focalOffset = calculateFocalOffset(focalPoint, imageSize);
 
       final imageCenter = Offset(
@@ -261,7 +356,10 @@ class DonutChartPainter extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(DonutChartPainter oldDelegate) => true;
+  bool shouldRepaint(DonutChartPainter oldDelegate) =>
+      oldDelegate.data != data ||
+      oldDelegate.selectedHero != selectedHero ||
+      oldDelegate.expansion != expansion;
 }
 
 Offset calculateFocalOffset(Offset focalPoint, Size imageSize) {
