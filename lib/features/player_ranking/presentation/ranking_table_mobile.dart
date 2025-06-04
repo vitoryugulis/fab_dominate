@@ -75,8 +75,8 @@ class RankingTableMobile extends StatelessWidget {
                           Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              const Icon(Icons.star,
-                                  color: AppColors.primaryLight),
+                              const Icon(Icons.star_outline,
+                                  color: AppColors.beigeDarker),
                               const SizedBox(width: 4),
                               Text(
                                 'Pontos: $wins',
@@ -91,7 +91,7 @@ class RankingTableMobile extends StatelessWidget {
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               const Icon(Icons.bar_chart,
-                                  color: AppColors.primaryLight),
+                                  color: AppColors.beigeDarker),
                               const SizedBox(width: 4),
                               Text(
                                 'Win%: $events',
@@ -105,8 +105,8 @@ class RankingTableMobile extends StatelessWidget {
                           Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              const Icon(Icons.emoji_events,
-                                  color: AppColors.primaryLight),
+                              const Icon(Icons.emoji_events_outlined,
+                                  color: AppColors.beigeDarker),
                               const SizedBox(width: 4),
                               Text(
                                 'Vitórias: $rounds',
@@ -120,8 +120,8 @@ class RankingTableMobile extends StatelessWidget {
                           Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              const Icon(Icons.replay,
-                                  color: AppColors.primaryLight),
+                              const Icon(Icons.replay_outlined,
+                                  color: AppColors.beigeDarker),
                               const SizedBox(width: 4),
                               Text(
                                 'Rodadas: $winRate',

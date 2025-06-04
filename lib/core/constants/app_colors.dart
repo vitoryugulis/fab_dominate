@@ -10,6 +10,6 @@ class AppColors {
   static const Color beigeLight = Color(0xFFF2E8C6); // #F2E8C6
   static const Color text = Color(0xFF000000); // #000000
 
-  static final Color lightRowColor = primaryLight.withValues(alpha: 0.1);
-  static final Color darkRowColor = primaryLight.withValues(alpha: 0.2);
+  static final Color lightRowColor = primaryLight.withValues(alpha: 0.2);
+  static final Color darkRowColor = primaryLight.withValues(alpha: 0.3);
 }
