@@ -1,8 +1,9 @@
 import 'package:dev/core/constants/app_colors.dart';
 import 'package:dev/core/constants/constants.dart';
 import 'package:dev/features/home/data/datasources/player_hero/player_hero_datasource.dart';
-import 'package:dev/features/home/presentation/report_selector.dart';
-import 'package:dev/features/home/presentation/sheet_selector.dart';
+import 'package:dev/features/home/presentation/widgets/prototype_warning_dialog.dart';
+import 'package:dev/features/home/presentation/widgets/report_selector.dart';
+import 'package:dev/features/home/presentation/widgets/sheet_selector.dart';
 import 'package:dev/features/rules/datasources/rules/rules_datasource.dart';
 import 'package:dev/features/rules/domain/entities/document.dart';
 import 'package:dev/features/rules/presentation/rules_page.dart';
@@ -37,7 +38,6 @@ class _HomeState extends State<Home> {
   List<List<String>> heroData = [];
   List<String> paragraphs = [];
   String? imageUrl;
-
   @override
   void initState() {
     super.initState();
@@ -50,6 +50,13 @@ class _HomeState extends State<Home> {
       dio: Dio(),
       credentialsJson: Credentials.firebase.docsJson,
     );
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      showDialog(
+        context: context,
+        builder: (context) => const PrototypeWarningDialog(),
+      );
+    });
 
     loadData();
   }
@@ -80,7 +87,6 @@ class _HomeState extends State<Home> {
         playerData = playerSheet;
         heroData = heroSheet;
         paragraphs = DocumentParser.extractParagraphs(document);
-        imageUrl = DocumentParser.extractImage(document);
       });
     } catch (e) {
       setState(() {
@@ -97,7 +103,7 @@ class _HomeState extends State<Home> {
         context,
         MaterialPageRoute(
           builder: (context) =>
-              RulesPage(rawTexts: paragraphs, imageUrl: imageUrl),
+              RulesPage(rawTexts: paragraphs),
         ),
       );
     } catch (e) {

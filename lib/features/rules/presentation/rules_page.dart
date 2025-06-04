@@ -3,9 +3,8 @@ import 'package:flutter/material.dart';
 
 class RulesPage extends StatelessWidget {
   final List<String> rawTexts;
-  final String? imageUrl;
 
-  const RulesPage({super.key, required this.rawTexts, this.imageUrl});
+  const RulesPage({super.key, required this.rawTexts});
 
   List<String> _parseParagraphs(List<String> rawTexts) {
     final paragraphs = <String>[];
@@ -36,9 +35,15 @@ class RulesPage extends StatelessWidget {
       backgroundColor: AppColors.beigeLight,
       appBar: AppBar(
         backgroundColor: const Color(0xFF393E46),
-        title: const Text('Regras da Liga Commoner', style: TextStyle(color: AppColors.beigeLight),),
+        title: const Text(
+          'Regras da Liga Commoner',
+          style: TextStyle(color: AppColors.beigeLight),
+        ),
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: AppColors.beigeLight,),
+          icon: const Icon(
+            Icons.arrow_back,
+            color: AppColors.beigeLight,
+          ),
           onPressed: () {
             Navigator.of(context).pop(); // Volta para a página anterior
           },
@@ -63,29 +68,30 @@ class RulesPage extends StatelessWidget {
               ),
             // Exibe os parágrafos com marcadores
             for (var paragraph in parsedParagraphs.skip(1))
-              Padding(
-                padding: const EdgeInsets.only(bottom: 16),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text(
-                      '• ',
-                      style: TextStyle(fontSize: 16),
-                    ),
-                    Expanded(
-                      child: Text(
-                        paragraph,
-                        style: const TextStyle(fontSize: 16),
+              // Exibe a imagem, se disponível
+              paragraph.contains('<image>')
+                  ? Center(
+                      child: Image.network(
+                          paragraph.replaceAll('<image>', '').trim()),
+                    )
+                  : Padding(
+                      padding: const EdgeInsets.only(bottom: 16),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text(
+                            '• ',
+                            style: TextStyle(fontSize: 16),
+                          ),
+                          Expanded(
+                            child: Text(
+                              paragraph,
+                              style: const TextStyle(fontSize: 16),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
-                  ],
-                ),
-              ),
-            // Exibe a imagem, se disponível
-            if (imageUrl != null)
-              Center(
-                child: Image.network(imageUrl!),
-              ),
           ],
         ),
       ),
