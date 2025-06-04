@@ -126,7 +126,6 @@ class _HomeState extends State<Home> {
     final mediaWidth = MediaQuery.of(context).size.width;
     final isMobile = mediaWidth < 1000;
     double horizontalPadding = isMobile ? 5 : mediaWidth * 0.07;
-
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.black,
@@ -184,11 +183,11 @@ class _HomeState extends State<Home> {
                       style: TextStyle(color: AppColors.primary),
                     ),
                   ),
-
+            // Bordas verticais
             if (!isMobile)
-              IgnorePointer(
-                ignoring: true,
-                child: Positioned.fill(
+              Positioned.fill(
+                child: IgnorePointer(
+                  ignoring: true,
                   child: Container(
                     margin: EdgeInsets.symmetric(horizontal: horizontalPadding),
                     decoration: BoxDecoration(
@@ -203,11 +202,10 @@ class _HomeState extends State<Home> {
                   ),
                 ),
               ),
-
             if (!isMobile)
-              IgnorePointer(
-                ignoring: true,
-                child: Positioned.fill(
+              Positioned.fill(
+                child: IgnorePointer(
+                  ignoring: true,
                   child: Container(
                     margin:
                         EdgeInsets.symmetric(horizontal: horizontalPadding - 5),
@@ -222,7 +220,7 @@ class _HomeState extends State<Home> {
                     ),
                   ),
                 ),
-              )
+              ),
           ],
         ),
       ),
