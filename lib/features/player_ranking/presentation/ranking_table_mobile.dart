@@ -44,11 +44,11 @@ class RankingTableMobile extends StatelessWidget {
               children: [
                 CircleAvatar(
                   radius: 20,
-                  backgroundColor: AppColors.primaryLight,
+                  backgroundColor: AppColors.text.withValues(alpha: 0.7),
                   child: Text(
                     name.isNotEmpty ? (index + 1).toString() : '?',
                     style: const TextStyle(
-                      color: AppColors.beigeDark,
+                      color: AppColors.beigeDarker,
                       fontWeight: FontWeight.bold,
                       fontSize: 16,
                     ),

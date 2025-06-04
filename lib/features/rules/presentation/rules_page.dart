@@ -71,7 +71,7 @@ class _RulesPageState extends State<RulesPage> {
           leading: IconButton(
             icon: const Icon(
               Icons.arrow_back,
-              color: AppColors.beigeLight,
+              color: AppColors.beigeDarker,
             ),
             onPressed: () {
               Navigator.of(context).pop();
@@ -94,7 +94,7 @@ class _RulesPageState extends State<RulesPage> {
               LayoutBuilder(
                 builder: (context, constraints) {
                   final isWeb = constraints.maxWidth > 800;
-                  final horizontalPadding = isWeb ? 140.0 : 32.0;
+                  final horizontalPadding = isWeb ? 160.0 : 32.0;
 
                   return FutureBuilder<List<String>>(
                     future: _rulesFuture,
