@@ -30,7 +30,7 @@ class PlayerReportColumns {
 }
 
 class StoreNames {
-  static const String bolovo = 'Bolovo Gemes';
+  static const String bolovo = 'Bolovo Games';
   static const String arena = 'Arena Geek';
-  static const String caverna = 'Carverna do Dragão';
+  static const String caverna = 'Caverna do Dragão';
 }
