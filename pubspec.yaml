@@ -148,6 +148,7 @@ flutter:
     - lib/assets/heroes/young/fai.png
     - lib/assets/heroes/young/lexi.png
     - lib/assets/heroes/young/verdance.png
+    - lib/assets/heroes/young/lander.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

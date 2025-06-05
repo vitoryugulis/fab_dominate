@@ -17,11 +17,11 @@ class YoungHeroImageMapper {
   static const Map<String, HeroAssetData> heroImageMap = {
     YoungHeroNames.araknisolitaire: HeroAssetData(
       assetPath: YoungHeroAssets.araknisolitaire,
-        focalPoint: Offset(0.2, 0.1)
+      focalPoint: Offset(0.2, 0.1),
     ),
     YoungHeroNames.arakniweb: HeroAssetData(
       assetPath: YoungHeroAssets.arakniweb,
-      focalPoint: Offset(0.3, 0.2)
+      focalPoint: Offset(0.3, 0.2),
     ),
     YoungHeroNames.aurora: HeroAssetData(
       assetPath: YoungHeroAssets.aurora2,
@@ -32,7 +32,7 @@ class YoungHeroImageMapper {
     ),
     YoungHeroNames.benji: HeroAssetData(
       assetPath: YoungHeroAssets.benji,
-      focalPoint: Offset(0, -0.25),
+      focalPoint: Offset(0, 0.3),
     ),
     YoungHeroNames.betsy: HeroAssetData(
       assetPath: YoungHeroAssets.betsy,
@@ -46,7 +46,7 @@ class YoungHeroImageMapper {
     ),
     YoungHeroNames.dash: HeroAssetData(
       assetPath: YoungHeroAssets.dash,
-      focalPoint: Offset(-0.3, 0.40)
+      focalPoint: Offset(-0.0, 0.40),
     ),
     YoungHeroNames.dashdatabase: HeroAssetData(
       assetPath: YoungHeroAssets.dashdatabase,
@@ -68,9 +68,7 @@ class YoungHeroImageMapper {
       assetPath: YoungHeroAssets.fang,
     ),
     YoungHeroNames.ira: HeroAssetData(
-      assetPath: YoungHeroAssets.ira,
-      focalPoint: Offset(-0.1, 0.4)
-    ),
+        assetPath: YoungHeroAssets.ira, focalPoint: Offset(-0.1, 0.4),),
     YoungHeroNames.kano: HeroAssetData(
       assetPath: YoungHeroAssets.kano,
     ),
@@ -91,7 +89,7 @@ class YoungHeroImageMapper {
     ),
     YoungHeroNames.olympia: HeroAssetData(
       assetPath: YoungHeroAssets.olympia,
-      focalPoint: Offset(-0.1, 0.5),
+      focalPoint: Offset(-0.32, 0.45),
     ),
     YoungHeroNames.oscilio: HeroAssetData(
       assetPath: YoungHeroAssets.oscilio,
@@ -117,7 +115,7 @@ class YoungHeroImageMapper {
     ),
     YoungHeroNames.chane: HeroAssetData(
       assetPath: YoungHeroAssets.chane,
-      focalPoint: Offset(0, 0.0),
+      focalPoint: Offset(0, 0.2),
     ),
     YoungHeroNames.bravo: HeroAssetData(
       assetPath: YoungHeroAssets.bravo,
@@ -131,6 +129,10 @@ class YoungHeroImageMapper {
     YoungHeroNames.verdance: HeroAssetData(
       assetPath: YoungHeroAssets.verdance,
     ),
+    YoungHeroNames.lander: HeroAssetData(
+      assetPath: YoungHeroAssets.lander,
+      focalPoint: Offset(0.0, 0.2)
+    ),
   };
 
   static HeroAssetData? getHeroAsset(String heroName) {
@@ -142,6 +144,6 @@ class YoungHeroImageMapper {
   }
 
   static Offset getFocalPoint(String heroName) {
-    return heroImageMap[heroName]?.focalPoint ?? Offset.zero;
+    return heroImageMap[heroName]?.focalPoint ?? const Offset(0, 0.4);
   }
 }

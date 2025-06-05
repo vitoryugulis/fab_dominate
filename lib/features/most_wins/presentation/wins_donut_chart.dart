@@ -72,7 +72,7 @@ class _PlayersDonutChartState extends State<WinsDonutChart>
   Future<void> _loadAllHeroImages() async {
     final futures = widget.values.map((row) async {
       final name = row.isNotEmpty ? row[HeroReportColumns.name] : 'Unknown';
-      final assetPath = YoungHeroImageMapper.getAssetPath(name) ?? '';
+      final assetPath = YoungHeroImageMapper.getAssetPath(name.trim()) ?? '';
 
       final image = await _loadAssetImage(assetPath);
       if (image != null) {
@@ -324,7 +324,7 @@ class DonutChartPainter extends CustomPainter {
       final radius = (outerRadius + innerRadius) / 2;
       final faceZoom = 12;
 
-      final Offset focalPoint = YoungHeroImageMapper.getFocalPoint(name);
+      final Offset focalPoint = YoungHeroImageMapper.getFocalPoint(name.trim());
 
       final double angleX = cos(middleAngle);
       final double angleY = sin(middleAngle);

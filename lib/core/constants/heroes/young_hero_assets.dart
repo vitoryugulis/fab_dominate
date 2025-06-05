@@ -38,5 +38,6 @@ class YoungHeroAssets {
   static const String fai = 'lib/assets/heroes/young/fai.png';
   static const String lexi = 'lib/assets/heroes/young/lexi.png';
   static const String verdance = 'lib/assets/heroes/young/verdance.png';
+  static const String lander = 'lib/assets/heroes/young/lander.png';
 
 }

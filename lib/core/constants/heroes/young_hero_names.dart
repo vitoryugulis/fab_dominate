@@ -4,7 +4,7 @@ class YoungHeroNames {
   static const String arakniweb = 'Arakni, Web of Deceit';
   static const String aurora = 'Aurora';
   static const String azalea = 'Azalea';
-  static const String benji = 'Benji';
+  static const String benji = 'Benji, the Piercing Wind';
   static const String betsy = 'Betsy';
   static const String boltyn = 'Boltyn';
   static const String cindra = 'Cindra';
@@ -36,4 +36,5 @@ class YoungHeroNames {
   static const String fai = 'Fai';
   static const String lexi = 'Lexi';
   static const String verdance = 'Verdance';
+  static const String lander = 'Iyslander';
 }
