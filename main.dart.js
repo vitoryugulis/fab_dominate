@@ -25905,8 +25905,8 @@ if(B.c.q(s,"android"))return!0
 if(B.c.q(s,"ipad"))return!0
 return!1},
 aN_(a){switch(a){case"Liga.A":return"Arena Geek"
-case"Liga.B":return"Bolovo Gemes"
-case"Liga.C":return"Carverna do Drag\xe3o"
+case"Liga.B":return"Bolovo Games"
+case"Liga.C":return"Caverna do Drag\xe3o"
 default:return a}},
 aJd(a){var s,r,q,p,o,n,m="paragraph",l="inlineObjectElement",k=t.j,j=k.a(J.aT(J.aT(a,"body"),"content")),i=A.b([],t.s)
 for(s=J.as(j);s.v();){r=s.gH(s)
