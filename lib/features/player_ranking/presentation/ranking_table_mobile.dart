@@ -57,7 +57,7 @@ class RankingTableMobile extends StatelessWidget {
                 CircleAvatar(
                   radius: 20,
                   backgroundColor: AppColors.text.withValues(alpha: 0.7),
-                  child: Text(
+                  child: SelectableText(
                     name.isNotEmpty ? (index + 1).toString() : '?',
                     style: const TextStyle(
                       color: AppColors.beigeDarker,
@@ -71,7 +71,7 @@ class RankingTableMobile extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
+                      SelectableText(
                         name,
                         style: const TextStyle(
                           fontWeight: FontWeight.bold,
@@ -90,7 +90,7 @@ class RankingTableMobile extends StatelessWidget {
                               const Icon(Icons.star_outline,
                                   color: AppColors.beigeDarker),
                               const SizedBox(width: 4),
-                              Text(
+                              SelectableText(
                                 'Pontos: $wins',
                                 style: TextStyle(
                                   fontSize: dataFontSize,
@@ -105,7 +105,7 @@ class RankingTableMobile extends StatelessWidget {
                               const Icon(Icons.bar_chart,
                                   color: AppColors.beigeDarker),
                               const SizedBox(width: 4),
-                              Text(
+                              SelectableText(
                                 'Win%: $events',
                                 style: TextStyle(
                                   fontSize: dataFontSize,
@@ -120,7 +120,7 @@ class RankingTableMobile extends StatelessWidget {
                               const Icon(Icons.emoji_events_outlined,
                                   color: AppColors.beigeDarker),
                               const SizedBox(width: 4),
-                              Text(
+                              SelectableText(
                                 'Vitórias: $rounds',
                                 style: TextStyle(
                                   fontSize: dataFontSize,
@@ -135,7 +135,7 @@ class RankingTableMobile extends StatelessWidget {
                               const Icon(Icons.replay_outlined,
                                   color: AppColors.beigeDarker),
                               const SizedBox(width: 4),
-                              Text(
+                              SelectableText(
                                 'Rodadas: $winRate',
                                 style: TextStyle(
                                   fontSize: dataFontSize,

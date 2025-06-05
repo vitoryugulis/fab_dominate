@@ -110,11 +110,11 @@ class PlayersRankingTable extends StatelessWidget {
                     return DataRow(
                       color: WidgetStateColor.resolveWith((_) => rowColor),
                       cells: [
-                        DataCell(Text(name)),
-                        DataCell(Text(wins)),
-                        DataCell(Text(events)),
-                        DataCell(Text(rounds)),
-                        DataCell(Text(winRate)),
+                        DataCell(SelectableText(name)),
+                        DataCell(SelectableText(wins)),
+                        DataCell(SelectableText(events)),
+                        DataCell(SelectableText(rounds)),
+                        DataCell(SelectableText(winRate)),
                       ],
                     );
                   },
