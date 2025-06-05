@@ -17,16 +17,27 @@ class RankingTable extends StatelessWidget {
       );
     }
 
-    return Center(
+    if (values.length <= 1) {
+      return Center(
+        child: Text(
+          'Nenhum dado disponível',
+          style: TextStyle(
+            color: AppColors.primaryLight,
+            fontSize: 22,
+          ),
+        ),
+      );
+    }
+
+    return Align(
+      alignment: Alignment.topCenter,
       child: Padding(
         padding: const EdgeInsets.only(right: 24.0, left: 24.0, bottom: 24.0),
         child: Row(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            PlayersRankingTable(values: values),
-          ],
+          children: [PlayersRankingTable(values: values)],
         ),
       ),
     );

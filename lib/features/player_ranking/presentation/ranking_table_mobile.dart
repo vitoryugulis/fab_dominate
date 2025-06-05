@@ -16,6 +16,18 @@ class RankingTableMobile extends StatelessWidget {
       );
     }
 
+    if (values.length <= 1) {
+      return Center(
+        child: Text(
+          'Nenhum dado disponível',
+          style: TextStyle(
+            color: AppColors.primaryLight,
+            fontSize: 22,
+          ),
+        ),
+      );
+    }
+
     return ListView.builder(
       padding: const EdgeInsets.all(16),
       itemCount: values.length,

@@ -182,6 +182,18 @@ class _PlayersDonutChartState extends State<WinsDonutChart>
         ? Tween<double>(begin: 1.08, end: 0.98)
         : Tween<double>(begin: 1.2, end: 1.0);
 
+    if (totalWins == 0) {
+      return Center(
+        child: Text(
+          'Nenhum dado disponível',
+          style: TextStyle(
+            color: AppColors.primaryLight,
+            fontSize: 22,
+          ),
+        ),
+      );
+    }
+
     return LayoutBuilder(
       builder: (context, constraints) {
         final size = constraints.biggest;
