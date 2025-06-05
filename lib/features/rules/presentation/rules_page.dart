@@ -65,7 +65,7 @@ class _RulesPageState extends State<RulesPage> {
       appBar: AppBar(
         backgroundColor: Colors.black,
         title: const Text(
-          'Regras da Liga Commoner',
+          'Regras',
           style: TextStyle(color: AppColors.beigeDarker),
         ),
         leading: IconButton(
@@ -112,7 +112,7 @@ class _RulesPageState extends State<RulesPage> {
                             const Text(
                               'Erro ao carregar as regras. Tente novamente.',
                               style: TextStyle(
-                                  color: AppColors.primary, fontSize: 16),
+                                  color: AppColors.primary, fontSize: 22),
                               textAlign: TextAlign.center,
                             ),
                             const SizedBox(height: 16),
