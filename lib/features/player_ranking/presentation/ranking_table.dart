@@ -1,4 +1,5 @@
 import 'package:dev/core/constants/app_colors.dart';
+import 'package:dev/core/utils/name_formatter.dart';
 import 'package:flutter/material.dart';
 
 /// 🔥 Widget principal que combina a Tabela + Gráfico
@@ -110,7 +111,7 @@ class PlayersRankingTable extends StatelessWidget {
                     return DataRow(
                       color: WidgetStateColor.resolveWith((_) => rowColor),
                       cells: [
-                        DataCell(SelectableText(name)),
+                        DataCell(SelectableText(name.formatName())),
                         DataCell(SelectableText(wins)),
                         DataCell(SelectableText(events)),
                         DataCell(SelectableText(rounds)),

@@ -1,4 +1,5 @@
 import 'package:dev/core/constants/app_colors.dart';
+import 'package:dev/core/utils/name_formatter.dart';
 import 'package:flutter/material.dart';
 
 class RankingTableMobile extends StatelessWidget {
@@ -72,7 +73,7 @@ class RankingTableMobile extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       SelectableText(
-                        name,
+                        name.formatName(),
                         style: const TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 18,
